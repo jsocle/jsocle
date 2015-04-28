@@ -9,7 +9,7 @@ class ServerTest {
     object app : Klask(Paths.get("src/test/resources/static").toAbsolutePath())
 
     Test
-    fun testRun() {
+    fun testStatic() {
         app.run(onBackground = true)
         Assert.assertEquals("Hello, world!", app.server.client.get("/static/").data)
         app.stop()
