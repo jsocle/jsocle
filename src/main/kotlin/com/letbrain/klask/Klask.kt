@@ -1,5 +1,6 @@
 package com.letbrain.klask
 
+import com.letbrain.klask.request.RequestHandler
 import com.letbrain.klask.server.JettyServer
 import com.letbrain.klask.servlet.KlaskHttpServlet
 import org.eclipse.jetty.servlet.DefaultServlet
