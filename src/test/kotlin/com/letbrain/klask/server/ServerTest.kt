@@ -1,12 +1,12 @@
 package com.letbrain.klask.server
 
 import com.letbrain.klask.Klask
+import com.letbrain.klask.staticPath
 import org.junit.Assert
 import org.junit.Test
-import java.nio.file.Paths
 
 class ServerTest {
-    object app : Klask(Paths.get("src/test/resources/static").toAbsolutePath())
+    object app : Klask(staticPath = staticPath)
 
     Test
     fun testStatic() {
@@ -14,4 +14,15 @@ class ServerTest {
         Assert.assertEquals("Hello, world!", app.server.client.get("/static/").data)
         app.stop()
     }
+}
+
+fun main(args: Array<String>) {
+    val app = object : Klask(staticPath = staticPath) {
+        init {
+            route("/") { ->
+                return@route "Hello, world!"
+            }
+        }
+    }
+    app.run()
 }
