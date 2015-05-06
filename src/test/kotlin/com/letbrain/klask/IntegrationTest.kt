@@ -15,7 +15,7 @@ public class IntegrationTest {
                 return@route "Hello, ${name}!"
             }
 
-            route("/<name>/<many?:Int>") { name: String, many: Int ->
+            route("/<name>/<many:Int>") { name: String, many: Int ->
                 return@route Ul {
                     many.times { li("Hello, ${name}") }
                 }
@@ -27,6 +27,7 @@ public class IntegrationTest {
     fun testIntegrate() {
         app.run(onBackground = true)
         Assert.assertEquals("Hello, World!", app.server.client.get("/").data)
+        Assert.assertEquals("Hello, Steve Jobs!", app.server.client.get("/Steve%20Jobs").data)
         app.stop()
     }
 }

@@ -22,6 +22,10 @@ fun main(args: Array<String>) {
             route("/") { ->
                 return@route "Hello, world!"
             }
+
+            route("/users/<name>") { name: String ->
+                return@route "Hello, ${name}"
+            }
         }
     }
     app.run()
