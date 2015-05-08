@@ -23,7 +23,13 @@ public class RuleTest {
 
     Test
     fun testVariableNames() {
-        Assert.assertEquals(linkedSetOf<String>(), Rule("/").variables);
-        Assert.assertEquals(linkedSetOf("name"), Rule("/<name>").variables);
+        Assert.assertEquals(linkedSetOf<String>(), Rule("/").variableNames);
+        Assert.assertEquals(linkedSetOf("name", "id"), Rule("/<name>/<id:Int>").variableNames);
+    }
+
+    Test
+    fun testInt() {
+        Assert.assertEquals(null, Rule("/<id:Int>").match("/name"))
+        Assert.assertEquals(linkedMapOf("id" to 1), Rule("/<id:Int>").match("/1"))
     }
 }
