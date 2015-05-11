@@ -11,11 +11,11 @@ public class IntegrationTest {
                 return@route "Hello, World!"
             }
 
-            route("/<name>") { name: String ->
+            route("/hello/<name>") { name: String ->
                 return@route "Hello, ${name}!"
             }
 
-            route("/<name>/<many:Int>") { name: String, many: Int ->
+            route("/hello/<name>/<many:Int>") { name: String, many: Int ->
                 return@route Ul {
                     many.times { li("Hello, ${name}!") }
                 }
@@ -27,8 +27,11 @@ public class IntegrationTest {
     fun testIntegrate() {
         app.run(onBackground = true)
         Assert.assertEquals("Hello, World!", app.server.client.get("/").data)
-        Assert.assertEquals("Hello, Steve Jobs!", app.server.client.get("/Steve%20Jobs").data)
-        Assert.assertEquals("<ul><li>Hello, Steve Jobs!</li><li>Hello, Steve Jobs!</li><li>Hello, Steve Jobs!</li></ul>", app.server.client.get("/Steve%20Jobs/3").data)
+        Assert.assertEquals("Hello, Steve Jobs!", app.server.client.get("/hello/Steve%20Jobs").data)
+        Assert.assertEquals(
+                "<ul><li>Hello, Steve Jobs!</li><li>Hello, Steve Jobs!</li><li>Hello, Steve Jobs!</li></ul>",
+                app.server.client.get("/hello/Steve%20Jobs/3").data
+        )
         app.stop()
     }
 }
