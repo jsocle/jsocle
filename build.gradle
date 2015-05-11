@@ -30,4 +30,7 @@ dependencies {
             "org.eclipse.jetty:jetty-servlet:$jettyVersion",
             // support parameter names
             'org.springframework:spring-core:4.1.6.RELEASE'
+
+    // khtml's deps
+    compile "com.google.guava:guava:18.0"
 }

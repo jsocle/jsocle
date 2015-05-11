@@ -1,5 +1,6 @@
 package com.letbrain.klask
 
+import com.khtml.Node
 import com.letbrain.klask.request.RequestHandler
 import com.letbrain.klask.request.RequestHandlerMatchResult
 import com.letbrain.klask.request.RequestImpl
@@ -34,13 +35,21 @@ public open class Klask(staticPath: Path? = null) {
     public fun <P1, R> route(rule: String, handler: (p1: P1) -> R) {
         requestHandlers.add(object : RequestHandler<R>(rule) {
             override fun handle(request: RequestImpl): R {
-                val p1 = (request.pathVariables[this.rule.variables.first()]) as P1
+                val p1 = (request.pathVariables[this.rule.variableNames.first()]) as P1
                 return handler(p1)
             }
         })
     }
 
     public fun <P1, P2, R> route(rule: String, handler: (p1: P1, p2: P2) -> R) {
+        requestHandlers.add(object : RequestHandler<R>(rule) {
+            override fun handle(request: RequestImpl): R {
+                val variableNames = this.rule.variableNames.toList()
+                val p1 = request.pathVariables[variableNames[0]] as P1
+                val p2 = request.pathVariables[variableNames[1]] as P2
+                return handler(p1, p2)
+            }
+        });
     }
 
     public fun run(port: Int = 8080, onBackground: Boolean = false) {
@@ -80,6 +89,12 @@ public open class Klask(staticPath: Path? = null) {
         }
         val request = RequestImpl(result.pathVariables)
         val response = result.handler.handle(request)
-        resp.getWriter().use { it.print(response as String) }
+        resp.getWriter().use {
+            when (response) {
+                is String -> it.print(response)
+                is Node -> response.render(it)
+                else -> throw IllegalArgumentException()
+            }
+        }
     }
 }
