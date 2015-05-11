@@ -71,7 +71,7 @@ public open class Klask(staticPath: Path? = null) {
         server.stop()
     }
 
-    private fun findReqeustHander(uri: String): RequestHandlerMatchResult? {
+    private fun findRequestHandler(uri: String): RequestHandlerMatchResult? {
         for (handler in requestHandlers) {
             val pathVariables = handler.rule.match(uri)
             if (pathVariables != null) {
@@ -82,7 +82,7 @@ public open class Klask(staticPath: Path? = null) {
     }
 
     fun processRequest(req: HttpServletRequest, resp: HttpServletResponse) {
-        val result = findReqeustHander(URLDecoder.decode(req.getRequestURI(), "UTF-8"))
+        val result = findRequestHandler(URLDecoder.decode(req.getRequestURI(), "UTF-8"))
         if (result == null) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND)
             return
