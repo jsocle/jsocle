@@ -1,6 +1,7 @@
 package com.letbrain.klask
 
 import com.khtml.Node
+import com.letbrain.klask.client.TestClient
 import com.letbrain.klask.request.RequestHandler
 import com.letbrain.klask.request.RequestHandlerMatchResult
 import com.letbrain.klask.request.RequestImpl
@@ -19,6 +20,9 @@ import kotlin.properties.Delegates
 public open class Klask(staticPath: Path? = null) {
     public var server: JettyServer by Delegates.notNull()
         private set
+    public val client: TestClient
+        get() = TestClient(this)
+
     private val servlet = KlaskHttpServlet(this)
     private val rootPath = Paths.get(".").toAbsolutePath()
     private val staticPath = staticPath ?: rootPath.resolve("static")
