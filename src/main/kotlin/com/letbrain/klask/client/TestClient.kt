@@ -10,4 +10,3 @@ class TestClient(private val app: Klask) : Client() {
         return httpServletResponse.response
     }
 }
-
