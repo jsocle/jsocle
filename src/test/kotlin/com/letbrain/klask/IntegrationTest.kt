@@ -57,7 +57,7 @@ public class IntegrationTest {
 
         Assert.assertEquals("faqIndex", app.server.client.get("/faq/").data)
         Assert.assertEquals("licenseIndex", app.server.client.get("/faq/license").data)
-        
+
         app.stop()
     }
 }
