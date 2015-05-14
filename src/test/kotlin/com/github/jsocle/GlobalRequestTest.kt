@@ -6,7 +6,7 @@ import org.junit.Test
 public class GlobalRequestTest {
     Test
     fun testRequestGlobal() {
-        val app = object : Klask() {
+        val app = object : JSocle() {
             init {
                 route("/<name>") { name: String ->
                     return@route "${request.pathVariables["name"]}"

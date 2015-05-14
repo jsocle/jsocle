@@ -1,4 +1,4 @@
 package com.github.jsocle
 
-abstract public class Blueprint() : KlaskApp() {
+abstract public class Blueprint() : JSocleApp() {
 }

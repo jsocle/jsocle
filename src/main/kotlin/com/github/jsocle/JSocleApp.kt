@@ -6,7 +6,7 @@ import com.github.jsocle.requests.RequestHandlerMatchResult
 import com.github.jsocle.requests.RequestImpl
 import java.util.ArrayList
 
-public abstract class KlaskApp {
+public abstract class JSocleApp {
     protected val requestHandlers: ArrayList<RequestHandler<*>> = arrayListOf()
     protected val children: ArrayList<Child> = arrayListOf()
 
@@ -38,7 +38,7 @@ public abstract class KlaskApp {
         });
     }
 
-    public fun register(app: KlaskApp, urlPrefix: String? = null) {
+    public fun register(app: JSocleApp, urlPrefix: String? = null) {
         children.add(Child(app, urlPrefix))
     }
 
@@ -72,7 +72,7 @@ public abstract class KlaskApp {
         return child.app.findRequestHandler(uri)
     }
 
-    public class Child(public val app: KlaskApp, public val urlPrefix: String?) {
+    public class Child(public val app: JSocleApp, public val urlPrefix: String?) {
         public val rule: PrefixRule? = if (urlPrefix != null) PrefixRule(urlPrefix) else null
     }
 }

@@ -4,7 +4,7 @@ import com.khtml.Node
 import com.github.jsocle.client.TestClient
 import com.github.jsocle.requests.RequestImpl
 import com.github.jsocle.server.JettyServer
-import com.github.jsocle.servlet.KlaskHttpServlet
+import com.github.jsocle.servlet.JSocleHttpServlet
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.ServletHolder
@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import kotlin.properties.Delegates
 
-public open class Klask(staticPath: Path? = null) : KlaskApp() {
+public open class JSocle(staticPath: Path? = null) : JSocleApp() {
     public var server: JettyServer by Delegates.notNull()
         private set
     public val client: TestClient
         get() = TestClient(this)
 
-    private val servlet = KlaskHttpServlet(this)
+    private val servlet = JSocleHttpServlet(this)
     private val rootPath = Paths.get(".").toAbsolutePath()
     private val staticPath = staticPath ?: rootPath.resolve("static")
 

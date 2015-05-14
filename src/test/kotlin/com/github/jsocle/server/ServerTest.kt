@@ -1,12 +1,12 @@
 package com.github.jsocle.server
 
-import com.github.jsocle.Klask
+import com.github.jsocle.JSocle
 import com.github.jsocle.staticPath
 import org.junit.Assert
 import org.junit.Test
 
 class ServerTest {
-    object app : Klask(staticPath = staticPath)
+    object app : JSocle(staticPath = staticPath)
 
     Test
     fun testStatic() {
@@ -17,7 +17,7 @@ class ServerTest {
 }
 
 fun main(args: Array<String>) {
-    val app = object : Klask(staticPath = staticPath) {
+    val app = object : JSocle(staticPath = staticPath) {
         init {
             route("/") { ->
                 return@route "Hello, world!"

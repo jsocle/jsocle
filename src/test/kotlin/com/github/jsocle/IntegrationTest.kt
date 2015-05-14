@@ -32,7 +32,7 @@ public class IntegrationTest {
         }
     }
 
-    object app : Klask() {
+    object app : JSocle() {
         init {
             route("/") { ->
                 return@route "Hello, World!"
