@@ -20,6 +20,7 @@ public abstract class JSocleApp {
 
     public fun <P1, R> route(rule: String, handler: (p1: P1) -> R) {
         requestHandlers.add(object : RequestHandler<R>(rule) {
+            suppress("UNCHECKED_CAST")
             override fun handle(request: RequestImpl): R {
                 val p1 = (request.pathVariables[this.rule.variableNames.first()]) as P1
                 return handler(p1)
@@ -29,6 +30,7 @@ public abstract class JSocleApp {
 
     public fun <P1, P2, R> route(rule: String, handler: (p1: P1, p2: P2) -> R) {
         requestHandlers.add(object : RequestHandler<R>(rule) {
+            suppress("UNCHECKED_CAST")
             override fun handle(request: RequestImpl): R {
                 val variableNames = this.rule.variableNames.toList()
                 val p1 = request.pathVariables[variableNames[0]] as P1
