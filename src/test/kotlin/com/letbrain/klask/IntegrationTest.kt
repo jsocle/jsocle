@@ -5,6 +5,25 @@ import org.junit.Assert
 import org.junit.Test
 
 public class IntegrationTest {
+    class FaqApp : Blueprint() {
+        class License : Blueprint() {
+            init {
+                route("/license") { ->
+                    return@route "licenseIndex"
+                }
+            }
+
+        }
+
+        init {
+            route("/") { ->
+                return@route "faqIndex"
+            }
+
+            register(License())
+        }
+    }
+
     object app : Klask() {
         init {
             route("/") { ->
@@ -20,18 +39,25 @@ public class IntegrationTest {
                     many.times { li("Hello, ${name}!") }
                 }
             }
+
+            register(FaqApp(), urlPrefix = "/faq")
         }
     }
 
     Test
     fun testIntegrate() {
         app.run(onBackground = true)
+
         Assert.assertEquals("Hello, World!", app.server.client.get("/").data)
         Assert.assertEquals("Hello, Steve Jobs!", app.server.client.get("/hello/Steve%20Jobs").data)
         Assert.assertEquals(
                 "<ul><li>Hello, Steve Jobs!</li><li>Hello, Steve Jobs!</li><li>Hello, Steve Jobs!</li></ul>",
                 app.server.client.get("/hello/Steve%20Jobs/3").data
         )
+
+        Assert.assertEquals("faqIndex", app.server.client.get("/faq/").data)
+        Assert.assertEquals("licenseIndex", app.server.client.get("/faq/license").data)
+        
         app.stop()
     }
 }
