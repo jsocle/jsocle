@@ -1,6 +1,6 @@
-package com.letbrain.klask.client
+package com.github.jsocle.client
 
-import com.letbrain.klask.response.Response
+import com.github.jsocle.response.Response
 import java.io.ByteArrayOutputStream
 import java.io.PrintWriter
 import java.util.Locale

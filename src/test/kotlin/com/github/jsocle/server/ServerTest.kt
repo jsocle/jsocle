@@ -1,7 +1,7 @@
-package com.letbrain.klask.server
+package com.github.jsocle.server
 
-import com.letbrain.klask.Klask
-import com.letbrain.klask.staticPath
+import com.github.jsocle.Klask
+import com.github.jsocle.staticPath
 import org.junit.Assert
 import org.junit.Test
 

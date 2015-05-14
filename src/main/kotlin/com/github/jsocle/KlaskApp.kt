@@ -1,9 +1,9 @@
-package com.letbrain.klask
+package com.github.jsocle
 
-import com.letbrain.klask.requests.PrefixRule
-import com.letbrain.klask.requests.RequestHandler
-import com.letbrain.klask.requests.RequestHandlerMatchResult
-import com.letbrain.klask.requests.RequestImpl
+import com.github.jsocle.requests.PrefixRule
+import com.github.jsocle.requests.RequestHandler
+import com.github.jsocle.requests.RequestHandlerMatchResult
+import com.github.jsocle.requests.RequestImpl
 import java.util.ArrayList
 
 public abstract class KlaskApp {

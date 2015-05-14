@@ -1,6 +1,6 @@
-package com.letbrain.klask
+package com.github.jsocle
 
-import com.letbrain.klask.requests.Request
+import com.github.jsocle.requests.Request
 
 public object request : Request {
     private val local = ThreadLocal<Request>()

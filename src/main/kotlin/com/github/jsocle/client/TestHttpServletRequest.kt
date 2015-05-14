@@ -1,4 +1,4 @@
-package com.letbrain.klask.client
+package com.github.jsocle.client
 
 import java.io.BufferedReader
 import java.net.URL

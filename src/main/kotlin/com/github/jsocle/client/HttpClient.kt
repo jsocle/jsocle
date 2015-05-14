@@ -1,7 +1,7 @@
-package com.letbrain.klask.client
+package com.github.jsocle.client
 
-import com.letbrain.klask.response.Response
-import com.letbrain.klask.response.StaticResponse
+import com.github.jsocle.response.Response
+import com.github.jsocle.response.StaticResponse
 import java.net.URL
 
 public class HttpClient(private val port: Int) : Client() {

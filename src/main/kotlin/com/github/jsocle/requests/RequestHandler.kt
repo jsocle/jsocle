@@ -1,4 +1,4 @@
-package com.letbrain.klask.requests
+package com.github.jsocle.requests
 
 abstract public class RequestHandler<R>(rule: String) {
     public val rule: RouteRule = RouteRule(rule)

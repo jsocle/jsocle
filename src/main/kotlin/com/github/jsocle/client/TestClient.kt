@@ -1,7 +1,7 @@
-package com.letbrain.klask.client
+package com.github.jsocle.client
 
-import com.letbrain.klask.Klask
-import com.letbrain.klask.response.Response
+import com.github.jsocle.Klask
+import com.github.jsocle.response.Response
 
 class TestClient(private val app: Klask) : Client() {
     override fun get(url: String): Response {

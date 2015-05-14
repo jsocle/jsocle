@@ -1,6 +1,6 @@
-package com.letbrain.klask.client
+package com.github.jsocle.client
 
-import com.letbrain.klask.response.Response
+import com.github.jsocle.response.Response
 
 abstract public class Client {
     abstract fun get(url: String): Response

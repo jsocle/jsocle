@@ -1,4 +1,4 @@
-package com.letbrain.klask
+package com.github.jsocle
 
 import com.khtml.elements.Ul
 import org.junit.Assert

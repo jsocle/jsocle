@@ -1,10 +1,10 @@
-package com.letbrain.klask
+package com.github.jsocle
 
 import com.khtml.Node
-import com.letbrain.klask.client.TestClient
-import com.letbrain.klask.requests.RequestImpl
-import com.letbrain.klask.server.JettyServer
-import com.letbrain.klask.servlet.KlaskHttpServlet
+import com.github.jsocle.client.TestClient
+import com.github.jsocle.requests.RequestImpl
+import com.github.jsocle.server.JettyServer
+import com.github.jsocle.servlet.KlaskHttpServlet
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.ServletHolder
@@ -51,7 +51,7 @@ public open class Klask(staticPath: Path? = null) : KlaskApp() {
             return
         }
         val request = RequestImpl(result.pathVariables)
-        com.letbrain.klask.request.push(request)
+        com.github.jsocle.request.push(request)
         try {
             val response = result.handler.handle(request)
             resp.getWriter().use {
@@ -62,7 +62,7 @@ public open class Klask(staticPath: Path? = null) : KlaskApp() {
                 }
             }
         } finally {
-            com.letbrain.klask.request.pop()
+            com.github.jsocle.request.pop()
         }
     }
 }

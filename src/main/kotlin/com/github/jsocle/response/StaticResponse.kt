@@ -1,4 +1,4 @@
-package com.letbrain.klask.response
+package com.github.jsocle.response
 
 public class StaticResponse(public override val data: String) : Response() {
 }

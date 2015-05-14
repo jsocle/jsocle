@@ -1,6 +1,6 @@
-package com.letbrain.klask.servlet
+package com.github.jsocle.servlet
 
-import com.letbrain.klask.Klask
+import com.github.jsocle.Klask
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

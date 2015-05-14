@@ -1,4 +1,4 @@
-package com.letbrain.klask
+package com.github.jsocle
 
 fun <T, R> Iterable<T>.firstMapNotNull(function: Function1<T, R>): R {
     for (i in this) {

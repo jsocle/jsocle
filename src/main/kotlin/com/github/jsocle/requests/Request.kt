@@ -1,4 +1,4 @@
-package com.letbrain.klask.requests
+package com.github.jsocle.requests
 
 public trait Request {
     public val pathVariables: Map<String, Any>

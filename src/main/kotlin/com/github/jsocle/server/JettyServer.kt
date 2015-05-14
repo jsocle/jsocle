@@ -1,7 +1,7 @@
-package com.letbrain.klask.server
+package com.github.jsocle.server
 
-import com.letbrain.klask.client.Client
-import com.letbrain.klask.client.HttpClient
+import com.github.jsocle.client.Client
+import com.github.jsocle.client.HttpClient
 import org.eclipse.jetty.server.Server
 
 public class JettyServer(public var port: Int) : Server(port) {

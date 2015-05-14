@@ -1,6 +1,6 @@
-package com.letbrain.klask.client
+package com.github.jsocle.client
 
-import com.letbrain.klask.Klask
+import com.github.jsocle.Klask
 import org.junit.Assert
 import org.junit.Test
 
