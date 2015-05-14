@@ -17,18 +17,17 @@ version = "0.0.1"
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://jitpack.io"
+    }
 }
 
 dependencies {
     testCompile 'junit:junit:4.12'
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
             "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
             "org.eclipse.jetty:jetty-server:$jettyVersion",
-            "org.eclipse.jetty:jetty-servlet:$jettyVersion"
-
-    // khtml's deps
-    compile "com.google.guava:guava:18.0"
+            "org.eclipse.jetty:jetty-servlet:$jettyVersion",
+            'com.github.sungmin-park:khtml:5f1764ceb8'
 }
