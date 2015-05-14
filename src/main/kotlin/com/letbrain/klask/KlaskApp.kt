@@ -44,20 +44,14 @@ public abstract class KlaskApp {
 
 
     protected fun findRequestHandler(uri: String): RequestHandlerMatchResult? {
-        for (handler in requestHandlers) {
-            val pathVariables = handler.rule.match(uri)
-            if (pathVariables != null) {
-                return RequestHandlerMatchResult(handler, pathVariables)
-            }
+        val matchResult = requestHandlers.firstMapNotNull {
+            val pathVariables = it.rule.match(uri)
+            if (pathVariables != null) RequestHandlerMatchResult(it, pathVariables) else null
         }
-
-        for (child in children) {
-            val childResult = findChildRequestHandler(child, uri)
-            if (childResult != null) {
-                return childResult;
-            }
+        if (matchResult != null) {
+            return matchResult
         }
-        return null
+        return children.firstMapNotNull { findChildRequestHandler(it, uri) }
     }
 
     private fun findChildRequestHandler(child: Child, uri: String): RequestHandlerMatchResult? {
@@ -82,4 +76,3 @@ public abstract class KlaskApp {
         public val rule: PrefixRule? = if (urlPrefix != null) PrefixRule(urlPrefix) else null
     }
 }
-
