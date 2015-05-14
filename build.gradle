@@ -27,9 +27,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
             "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
             "org.eclipse.jetty:jetty-server:$jettyVersion",
-            "org.eclipse.jetty:jetty-servlet:$jettyVersion",
-            // support parameter names
-            'org.springframework:spring-core:4.1.6.RELEASE'
+            "org.eclipse.jetty:jetty-servlet:$jettyVersion"
 
     // khtml's deps
     compile "com.google.guava:guava:18.0"
