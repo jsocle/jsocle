@@ -1,10 +1,10 @@
 package com.github.jsocle
 
 import com.github.jsocle.client.TestClient
+import com.github.jsocle.html.Node
 import com.github.jsocle.requests.RequestImpl
 import com.github.jsocle.server.JettyServer
 import com.github.jsocle.servlet.JSocleHttpServlet
-import com.khtml.Node
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.ServletHolder

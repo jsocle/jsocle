@@ -29,5 +29,5 @@ dependencies {
             "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
             "org.eclipse.jetty:jetty-server:$jettyVersion",
             "org.eclipse.jetty:jetty-servlet:$jettyVersion",
-            'com.github.sungmin-park:khtml:5f1764ceb8'
+            'com.github.jsocle:jsocle-html:b866c872f7'
 }

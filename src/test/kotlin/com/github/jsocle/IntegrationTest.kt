@@ -1,6 +1,6 @@
 package com.github.jsocle
 
-import com.khtml.elements.Ul
+import com.github.jsocle.html.elements.Ul
 import org.junit.Assert
 import org.junit.Test
 
