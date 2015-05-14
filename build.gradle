@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '0.11.91.1'
+        kotlinVersion = '0.11.91.1+'
         jettyVersion = '9.2.9.v20150224'
     }
     repositories {
