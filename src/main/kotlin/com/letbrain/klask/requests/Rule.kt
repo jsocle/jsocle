@@ -1,4 +1,4 @@
-package com.letbrain.klask.request
+package com.letbrain.klask.requests
 
 import java.util.regex.Pattern
 import kotlin.properties.Delegates

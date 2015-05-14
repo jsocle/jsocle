@@ -1,4 +1,4 @@
-package com.letbrain.klask.request
+package com.letbrain.klask.requests
 
 import org.junit.Assert
 import org.junit.Test

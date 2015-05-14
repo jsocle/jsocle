@@ -2,8 +2,7 @@ package com.letbrain.klask
 
 import com.khtml.Node
 import com.letbrain.klask.client.TestClient
-import com.letbrain.klask.request.RequestHandlerMatchResult
-import com.letbrain.klask.request.RequestImpl
+import com.letbrain.klask.requests.RequestImpl
 import com.letbrain.klask.server.JettyServer
 import com.letbrain.klask.servlet.KlaskHttpServlet
 import org.eclipse.jetty.servlet.DefaultServlet
@@ -52,13 +51,18 @@ public open class Klask(staticPath: Path? = null) : KlaskApp() {
             return
         }
         val request = RequestImpl(result.pathVariables)
-        val response = result.handler.handle(request)
-        resp.getWriter().use {
-            when (response) {
-                is String -> it.print(response)
-                is Node -> response.render(it)
-                else -> throw IllegalArgumentException()
+        com.letbrain.klask.request.push(request)
+        try {
+            val response = result.handler.handle(request)
+            resp.getWriter().use {
+                when (response) {
+                    is String -> it.print(response)
+                    is Node -> response.render(it)
+                    else -> throw IllegalArgumentException()
+                }
             }
+        } finally {
+            com.letbrain.klask.request.pop()
         }
     }
 }

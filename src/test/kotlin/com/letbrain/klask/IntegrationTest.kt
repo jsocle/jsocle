@@ -24,6 +24,14 @@ public class IntegrationTest {
         }
     }
 
+    class ProfileApp : Blueprint() {
+        init {
+            route("/") { ->
+                return@route "profile@"
+            }
+        }
+    }
+
     object app : Klask() {
         init {
             route("/") { ->
@@ -41,6 +49,7 @@ public class IntegrationTest {
             }
 
             register(FaqApp(), urlPrefix = "/faq")
+            register(ProfileApp(), urlPrefix = "/profile/<userId:Int>")
         }
     }
 
