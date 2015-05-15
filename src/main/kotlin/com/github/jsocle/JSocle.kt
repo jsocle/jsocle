@@ -51,7 +51,7 @@ public open class JSocle(staticPath: Path? = null) : JSocleApp() {
             return
         }
         val request = RequestImpl(result.pathVariables)
-        com.github.jsocle.request.push(request)
+        com.github.jsocle.Request.push(request)
         try {
             val response = result.handler.handle(request)
             resp.getWriter().use {
@@ -62,7 +62,7 @@ public open class JSocle(staticPath: Path? = null) : JSocleApp() {
                 }
             }
         } finally {
-            com.github.jsocle.request.pop()
+            com.github.jsocle.Request.pop()
         }
     }
 }

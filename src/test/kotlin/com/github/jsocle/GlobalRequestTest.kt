@@ -9,7 +9,7 @@ public class GlobalRequestTest {
         val app = object : JSocle() {
             init {
                 route("/<name>") { name: String ->
-                    return@route "${request.pathVariables["name"]}"
+                    return@route "${Request.pathVariables["name"]}"
                 }
             }
         }
