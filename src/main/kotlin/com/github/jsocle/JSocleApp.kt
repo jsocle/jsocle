@@ -1,5 +1,7 @@
 package com.github.jsocle
 
+import com.github.jsocle.handlers.Handler0
+import com.github.jsocle.handlers.Handler1
 import com.github.jsocle.requests.PrefixRule
 import com.github.jsocle.requests.RequestHandler
 import com.github.jsocle.requests.RequestHandlerMatchResult
@@ -17,6 +19,13 @@ public abstract class JSocleApp {
             }
         })
     }
+    public fun <R> route(rule: String, handler: Handler0<R>) {
+        requestHandlers.add(object : RequestHandler<R>(rule) {
+            override fun handle(request: RequestImpl): R {
+                return handler.handle()
+            }
+        })
+    }
 
     public fun <P1, R> route(rule: String, handler: (p1: P1) -> R) {
         requestHandlers.add(object : RequestHandler<R>(rule) {
@@ -24,6 +33,16 @@ public abstract class JSocleApp {
             override fun handle(request: RequestImpl): R {
                 val p1 = (request.pathVariables[this.rule.variableNames.first()]) as P1
                 return handler(p1)
+            }
+        })
+    }
+
+    public fun <P1, R> route(rule: String, handler: Handler1<P1, R>) {
+        requestHandlers.add(object : RequestHandler<R>(rule) {
+            suppress("UNCHECKED_CAST")
+            override fun handle(request: RequestImpl): R {
+                val p1 = (request.pathVariables[this.rule.variableNames.first()]) as P1
+                return handler.handle(p1)
             }
         })
     }
