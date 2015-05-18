@@ -1,7 +1,5 @@
 package com.github.jsocle
 
-import com.github.jsocle.requests.Request
-
 public class request {
     companion object request : com.github.jsocle.requests.Request {
         private val local = ThreadLocal<com.github.jsocle.requests.Request>()
@@ -30,5 +28,6 @@ public class request {
         }
 
         override val pathVariables: Map<String, Any> get() = r.pathVariables
+        override val url: String get() = r.url
     }
 }

@@ -2,6 +2,7 @@ package com.github.jsocle
 
 import com.github.jsocle.client.TestClient
 import com.github.jsocle.html.Node
+import com.github.jsocle.requests.RequestHandlerMatchResult
 import com.github.jsocle.requests.RequestImpl
 import com.github.jsocle.server.JettyServer
 import com.github.jsocle.servlet.JSocleHttpServlet
@@ -44,25 +45,38 @@ public open class JSocle(staticPath: Path? = null) : JSocleApp() {
         server.stop()
     }
 
-    fun processRequest(req: HttpServletRequest, resp: HttpServletResponse) {
-        val result = findRequestHandler(URLDecoder.decode(req.getRequestURI(), "UTF-8"))
+    fun requestContext(req: HttpServletRequest, body: (request: RequestImpl?, result: RequestHandlerMatchResult?) -> Unit) {
+        val requestUri = URLDecoder.decode(req.getRequestURI(), "UTF-8")
+        val result = findRequestHandler(requestUri)
         if (result == null) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND)
+            body(null, null)
             return
         }
-        val request = RequestImpl(result.pathVariables)
+        val request = RequestImpl(requestUri, result.pathVariables)
         com.github.jsocle.request.push(request)
         try {
-            val response = result.handler.handle(request)
+            body(request, result)
+        } finally {
+            com.github.jsocle.request.pop()
+        }
+    }
+
+    fun processRequest(req: HttpServletRequest, resp: HttpServletResponse) {
+        requestContext(req) { request, result ->
+            if (request == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND)
+                return@requestContext
+            }
+            val response = result!!.handler.handle(request)
             resp.getWriter().use {
                 when (response) {
                     is String -> it.print(response)
                     is Node -> response.render(it)
+                    is Unit -> it.print("")
                     else -> throw IllegalArgumentException()
                 }
             }
-        } finally {
-            com.github.jsocle.request.pop()
+
         }
     }
 }

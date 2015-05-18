@@ -9,4 +9,10 @@ class TestClient(private val app: JSocle) : Client() {
         app.processRequest(TestHttpServletRequest(url), httpServletResponse)
         return httpServletResponse.response
     }
+
+    fun get(url: String, intent: () -> Unit): Response {
+        val httpServletResponse = TestHttpServletResponse()
+        app.processRequest(TestHttpServletRequest(url), httpServletResponse)
+        return httpServletResponse.response
+    }
 }
