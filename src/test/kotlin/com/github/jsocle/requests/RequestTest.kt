@@ -20,13 +20,25 @@ public class RequestTest {
     }
 
     Test
-    fun testParams() {
+    fun testParameters() {
         app.client.get("/") {
             Assert.assertEquals(mapOf<String, List<String>>(), request.parameters)
         }
 
         app.client.get("/?name=john&job=cook") {
             Assert.assertEquals(mapOf("name" to listOf("john"), "job" to listOf("cook")), request.parameters)
+        }
+    }
+
+    Test
+    fun testParameter() {
+        app.client.get("/") {
+            Assert.assertEquals(null, request.parameter("name"))
+        }
+
+        app.client.get("/?name=john&job=cook") {
+            Assert.assertEquals("john", request.parameter("name"))
+            Assert.assertEquals("cook", request.parameter("job"))
         }
     }
 }

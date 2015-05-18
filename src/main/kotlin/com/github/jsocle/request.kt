@@ -30,5 +30,6 @@ public class request {
         override val pathVariables: Map<String, Any> get() = r.pathVariables
         override val url: String get() = r.url
         override val parameters: Map<String, List<String>> get() = r.parameters
+        override fun parameter(name: String): String? = r.parameter(name)
     }
 }
