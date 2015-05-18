@@ -1,7 +1,5 @@
 package com.github.jsocle
 
-import com.github.jsocle.handlers.Handler0
-import com.github.jsocle.handlers.Handler1
 import com.github.jsocle.requests.PrefixRule
 import com.github.jsocle.requests.RequestHandler
 import com.github.jsocle.requests.RequestHandlerMatchResult
@@ -60,7 +58,7 @@ public abstract class JSocleApp {
 
     private fun findChildRequestHandler(child: Child, uri: String): RequestHandlerMatchResult? {
         if (child.rule != null) {
-            val result = child.rule!!.match(uri)
+            val result = child.rule.match(uri)
             if (result == null) {
                 return null;
             }
@@ -77,6 +75,6 @@ public abstract class JSocleApp {
     }
 
     public class Child(public val app: JSocleApp, public val urlPrefix: String?) {
-        public val rule: PrefixRule? = if (urlPrefix != null) PrefixRule(urlPrefix!!) else null
+        public val rule: PrefixRule? = if (urlPrefix != null) PrefixRule(urlPrefix) else null
     }
 }

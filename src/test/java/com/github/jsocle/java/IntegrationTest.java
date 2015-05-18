@@ -2,18 +2,18 @@ package com.github.jsocle.java;
 
 import com.github.jsocle.JSocle;
 
-import static com.github.jsocle.Request.request;
+import static com.github.jsocle.request.request;
 
 public class IntegrationTest {
+    public static void main(String[] ar) {
+        new App().run(8080, false);
+    }
+
     public static class App extends JSocle {
         public App() {
-            route("/", () -> {
-                return "Hello World!!!";
-            });
+            route("/", () -> "Hello World!!!");
 
-            route("/<name>", name -> {
-                return "Hello " + name;
-            });
+            route("/<name>", name -> "Hello " + name);
 
             route("/<name>/<times:Int>", (String name, Integer times) -> {
                 String str = "";
@@ -23,13 +23,10 @@ public class IntegrationTest {
                 return str;
             });
 
-            route("/<name>/test/<job>", (String name, String job) -> {
-                return "Hello " + name + " : " + request.getPathVariables().get("job");
-            });
+            route(
+                    "/<name>/test/<job>",
+                    (String name, String job) -> "Hello " + name + " : " + request.getPathVariables().get("job")
+            );
         }
-    }
-
-    public static void main(String[] ar) {
-        new App().run(8080, false);
     }
 }

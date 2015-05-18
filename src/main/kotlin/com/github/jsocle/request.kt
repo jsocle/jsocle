@@ -2,7 +2,7 @@ package com.github.jsocle
 
 import com.github.jsocle.requests.Request
 
-public class Request {
+public class request {
     companion object request : com.github.jsocle.requests.Request {
         private val local = ThreadLocal<com.github.jsocle.requests.Request>()
 
