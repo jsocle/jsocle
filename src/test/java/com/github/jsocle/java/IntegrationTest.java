@@ -1,9 +1,9 @@
 package com.github.jsocle.java;
 
 import com.github.jsocle.JSocle;
+import com.github.jsocle.request;
 import org.junit.Test;
 
-import static com.github.jsocle.request.request;
 import static org.junit.Assert.assertEquals;
 
 public class IntegrationTest {
