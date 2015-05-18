@@ -52,7 +52,7 @@ public open class JSocle(staticPath: Path? = null) : JSocleApp() {
             body(null, null)
             return
         }
-        val request = RequestImpl(requestUri, result.pathVariables)
+        val request = RequestImpl(requestUri, result.pathVariables, req)
         com.github.jsocle.request.push(request)
         try {
             body(request, result)

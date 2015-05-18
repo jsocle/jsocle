@@ -2,6 +2,7 @@ package com.github.jsocle.client
 
 import java.io.BufferedReader
 import java.net.URL
+import java.net.URLDecoder
 import java.security.Principal
 import java.util.Enumeration
 import java.util.Locale
@@ -129,7 +130,15 @@ public class TestHttpServletRequest(url: String) : HttpServletRequest {
     }
 
     override fun getParameterMap(): MutableMap<String, Array<String>>? {
-        throw UnsupportedOperationException()
+        val map: MutableMap<String, Array<String>> = hashMapOf()
+        url.getQuery()?.split('&')?.map {
+            val (key, value) = it.split('=').map { URLDecoder.decode(it, "UTF-8") }
+            if (key !in map) {
+                map[key] = array()
+            }
+            map[key] = (map[key]!! + array(value)).copyToArray()
+        }
+        return map
     }
 
     override fun getContentType(): String? {
