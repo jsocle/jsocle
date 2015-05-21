@@ -30,7 +30,7 @@ dependencies {
             "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version",
             "org.eclipse.jetty:jetty-server:$jettyVersion",
             "org.eclipse.jetty:jetty-servlet:$jettyVersion",
-            'com.github.jsocle:jsocle-html:b866c872f7'
+            'com.github.jsocle:jsocle-html:b1266fa9e8'
 }
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
