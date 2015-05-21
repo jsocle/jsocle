@@ -9,4 +9,8 @@ public class JSocleHttpServlet(private val app: JSocle) : HttpServlet() {
     override fun doGet(req: HttpServletRequest?, resp: HttpServletResponse?) {
         app.processRequest(req!!, resp!!)
     }
+
+    override fun doPost(req: HttpServletRequest?, resp: HttpServletResponse?) {
+        app.processRequest(req!!, resp!!)
+    }
 }
