@@ -57,8 +57,9 @@ public abstract class JSocleApp {
     }
 
     private fun findChildRequestHandler(child: Child, uri: String): RequestHandlerMatchResult? {
-        if (child.rule != null) {
-            val result = child.rule.match(uri)
+        val rule = child.rule
+        if (rule != null) {
+            val result = rule.match(uri)
             if (result == null) {
                 return null;
             }
@@ -74,7 +75,7 @@ public abstract class JSocleApp {
         return child.app.findRequestHandler(uri)
     }
 
-    public class Child(public val app: JSocleApp, public val urlPrefix: String?) {
+    public class Child(public val app: JSocleApp, urlPrefix: String?) {
         public val rule: PrefixRule? = if (urlPrefix != null) PrefixRule(urlPrefix) else null
     }
 }
