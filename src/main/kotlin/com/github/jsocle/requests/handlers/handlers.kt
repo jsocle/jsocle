@@ -11,6 +11,7 @@ public class RequestHandler0<R>(app: JSocleApp, rule: String, private val handle
     }
 
     fun url(): String {
+        val app = this.app
         if (app is Blueprint) {
             return app.urlPrefixes + rule.rule
         }
