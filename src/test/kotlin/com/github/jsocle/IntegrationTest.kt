@@ -5,7 +5,7 @@ import org.junit.Assert
 import org.junit.Test
 
 public class IntegrationTest {
-    class FaqApp : Blueprint() {
+    object faqApp : Blueprint() {
         class License : Blueprint() {
             init {
                 route("/license") { ->
@@ -24,10 +24,32 @@ public class IntegrationTest {
         }
     }
 
-    class ProfileApp : Blueprint() {
+    object profileApp : Blueprint() {
         init {
             route("/") { ->
                 return@route "profile@"
+            }
+        }
+    }
+
+    object postApp : Blueprint() {
+        class Post(val id: Int, val title: String)
+
+        val posts = listOf("tutorial").mapIndexed { i, title -> Post(i + 1, title) }
+
+        val show = route("/<id:Int>") { id: Int ->
+            return@route posts.first { it.id == id }.title
+        }
+
+        init {
+            route("/") { ->
+                return@route Ul {
+                    posts.forEach {
+                        li {
+                            a(text_ = it.title, href = show.urlFor(it.id))
+                        }
+                    }
+                }
             }
         }
     }
@@ -48,8 +70,9 @@ public class IntegrationTest {
                 }
             }
 
-            register(FaqApp(), urlPrefix = "/faq")
-            register(ProfileApp(), urlPrefix = "/profile/<userId:Int>")
+            register(faqApp, urlPrefix = "/faq")
+            register(profileApp, urlPrefix = "/profile/<userId:Int>")
+            register(postApp, urlPrefix = "/post")
         }
     }
 
@@ -57,16 +80,20 @@ public class IntegrationTest {
     fun testIntegrate() {
         app.run(onBackground = true)
 
-        Assert.assertEquals("Hello, World!", app.server.client.get("/").data)
-        Assert.assertEquals("Hello, Steve Jobs!", app.server.client.get("/hello/Steve%20Jobs").data)
-        Assert.assertEquals(
-                "<ul><li>Hello, Steve Jobs!</li><li>Hello, Steve Jobs!</li><li>Hello, Steve Jobs!</li></ul>",
-                app.server.client.get("/hello/Steve%20Jobs/3").data
-        )
+        try {
+            Assert.assertEquals("Hello, World!", app.server.client.get("/").data)
+            Assert.assertEquals("Hello, Steve Jobs!", app.server.client.get("/hello/Steve%20Jobs").data)
+            Assert.assertEquals(
+                    "<ul><li>Hello, Steve Jobs!</li><li>Hello, Steve Jobs!</li><li>Hello, Steve Jobs!</li></ul>",
+                    app.server.client.get("/hello/Steve%20Jobs/3").data
+            )
 
-        Assert.assertEquals("faqIndex", app.server.client.get("/faq/").data)
-        Assert.assertEquals("licenseIndex", app.server.client.get("/faq/license").data)
+            Assert.assertEquals("faqIndex", app.server.client.get("/faq/").data)
+            Assert.assertEquals("licenseIndex", app.server.client.get("/faq/license").data)
 
-        app.stop()
+            Assert.assertEquals("<ul><li><a href=\"/post/1\">tutorial</li></ul>", app.server.client.get("/post/").data)
+        } finally {
+            app.stop()
+        }
     }
 }

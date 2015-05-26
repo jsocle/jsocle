@@ -2,6 +2,7 @@ package com.github.jsocle.java;
 
 import com.github.jsocle.JSocle;
 import com.github.jsocle.request;
+import com.github.jsocle.requests.handlers.RequestHandler0;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -18,9 +19,14 @@ public class IntegrationTest {
         assertEquals("Hello John", app.getClient().get("/John").getData());
         assertEquals("Hello John<br/>Hello John<br/>Hello John<br/>", app.getClient().get("/John/3").getData());
         assertEquals("Hello John : Cook", app.getClient().get("/John/job/Cook").getData());
+
+        assertEquals("/faq", app.faq.url());
     }
 
     public static class App extends JSocle {
+
+        private final RequestHandler0<Object> faq = route("/faq", () -> null);
+
         public App() {
             route("/", () -> "Hello World!!!");
 

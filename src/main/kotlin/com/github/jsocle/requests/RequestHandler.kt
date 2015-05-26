@@ -1,6 +1,8 @@
 package com.github.jsocle.requests
 
-abstract public class RequestHandler<R>(rule: String) {
+import com.github.jsocle.JSocleApp
+
+abstract public class RequestHandler<R>(protected val app: JSocleApp, rule: String) {
     public val rule: RouteRule = RouteRule(rule)
-    abstract public fun handle(request: RequestImpl): R
+    abstract fun handle(request: RequestImpl): R
 }
