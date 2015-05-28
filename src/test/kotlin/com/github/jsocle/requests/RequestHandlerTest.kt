@@ -16,6 +16,7 @@ public class RequestHandlerTest {
 
     object bookController : Blueprint() {
         val list = route("/") { -> }
+        val show = route("/<id:Int>") { id: Int -> }
 
         init {
             register(bookFaqController, "/faq")
@@ -29,6 +30,7 @@ public class RequestHandlerTest {
 
     object app : JSocle() {
         val index = route("/") { -> }
+        val showHotTopic = route("/hot-topic/<id:Int>") { id: Int -> }
 
         init {
             register(bookController, urlPrefix = "/books")
@@ -51,5 +53,16 @@ public class RequestHandlerTest {
     fun testNestedWithoutPrefixUrl() {
         Assert.assertEquals("/faq", etcController.faq.url())
         Assert.assertEquals("/books/isdn", bookEtcController.isdnList.url())
+    }
+
+    Test
+    fun testUrl1() {
+        Assert.assertEquals("/hot-topic/1", app.showHotTopic.url(1));
+    }
+
+    Test
+    fun testNestedUrl1() {
+        Assert.assertEquals("/", app.index.url())
+        Assert.assertEquals("/books/1", bookController.show.url(1));
     }
 }

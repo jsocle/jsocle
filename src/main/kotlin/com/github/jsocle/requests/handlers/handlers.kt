@@ -4,6 +4,7 @@ import com.github.jsocle.Blueprint
 import com.github.jsocle.JSocleApp
 import com.github.jsocle.requests.RequestHandler
 import com.github.jsocle.requests.RequestImpl
+import kotlin.properties.Delegates
 
 public class RequestHandler0<R>(app: JSocleApp, rule: String, private val handler: () -> R) : RequestHandler<R>(app, rule) {
     override fun handle(request: RequestImpl): R {
@@ -11,11 +12,7 @@ public class RequestHandler0<R>(app: JSocleApp, rule: String, private val handle
     }
 
     fun url(): String {
-        val app = this.app
-        if (app is Blueprint) {
-            return app.urlPrefixes + rule.rule
-        }
-        return rule.rule;
+        return absoluteRule
     }
 }
 
@@ -26,7 +23,8 @@ public class RequestHandler1<R, P1>(app: JSocleApp, rule: String, private val ha
         return handler(p1)
     }
 
-    fun urlFor(p1: P1): String {
-        return ""
+    fun url(p1: P1): String {
+        val variables = mapOf(rule.variableNames.toList()[0] to p1)
+        return absoluteRule.replaceAll("<([^>:]+)(:[^>]*)?>") { variables[it.group(1)].toString() }
     }
 }

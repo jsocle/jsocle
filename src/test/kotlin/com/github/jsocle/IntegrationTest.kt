@@ -46,7 +46,7 @@ public class IntegrationTest {
                 return@route Ul {
                     posts.forEach {
                         li {
-                            a(text_ = it.title, href = show.urlFor(it.id))
+                            a(text_ = it.title, href = show.url(it.id))
                         }
                     }
                 }
@@ -91,7 +91,7 @@ public class IntegrationTest {
             Assert.assertEquals("faqIndex", app.server.client.get("/faq/").data)
             Assert.assertEquals("licenseIndex", app.server.client.get("/faq/license").data)
 
-            Assert.assertEquals("<ul><li><a href=\"/post/1\">tutorial</li></ul>", app.server.client.get("/post/").data)
+            Assert.assertEquals("<ul><li><a href=\"/post/1\">tutorial</a></li></ul>", app.server.client.get("/post/").data)
         } finally {
             app.stop()
         }
