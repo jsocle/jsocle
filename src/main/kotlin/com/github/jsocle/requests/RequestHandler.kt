@@ -15,4 +15,8 @@ abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String)
             this.rule.rule;
         }
     }
+
+    public fun url(params: Map<String, Any>): String {
+        return absoluteRule.replaceAll("<([^>:]+)(:[^>]*)?>") { params[it.group(1)].toString() }
+    }
 }

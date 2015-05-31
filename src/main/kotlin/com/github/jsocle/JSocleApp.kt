@@ -28,7 +28,7 @@ public abstract class JSocleApp {
         val rh = object : RequestHandler<R>(this, rule) {
             suppress("UNCHECKED_CAST")
             override fun handle(request: RequestImpl): R {
-                val variableNames = this.rule.variableNames.toList()
+                val variableNames = this.rule.variableNameList
                 val p1 = request.pathVariables[variableNames[0]] as P1
                 val p2 = request.pathVariables[variableNames[1]] as P2
                 return handler(p1, p2)

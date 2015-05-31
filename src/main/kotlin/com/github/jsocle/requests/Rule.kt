@@ -1,16 +1,17 @@
 package com.github.jsocle.requests
 
 import java.util.regex.Pattern
-import kotlin.properties.Delegates
+
+private val VARIABLE_MAP = mapOf("String" to "([^/]+)", "Int" to "([0-9]|[1-9][0-9]+)")
+private val variablePattenString = "<([^>]+)>"
+private val variablePattern = Pattern.compile(variablePattenString)
 
 public abstract class Rule(public val rule: String) {
-    protected val re: Map<String, String> = mapOf("String" to "([^/]+)", "Int" to "([0-9]|[1-9][0-9]+)")
-    protected val patternString: String by Delegates.lazy {
-        rule.replaceAll("<([^>]+)>") { re[parseVariableName(it.group(1)).second]!! }
-    }
+    protected val patternString: String =
+            rule.replaceAll(variablePattenString) { VARIABLE_MAP[parseVariableName(it.group(1)).second]!! }
 
-    public val variables: Set<Variable> by Delegates.lazy {
-        val matcher = Pattern.compile("<([^>]+)>").matcher(rule)
+    public val variables: Set<Variable> = run {
+        val matcher = variablePattern.matcher(rule)
         val variables = linkedSetOf<Variable>()
         while (matcher.find()) {
             val pair = parseVariableName(matcher.group(1))
@@ -19,7 +20,9 @@ public abstract class Rule(public val rule: String) {
         variables
     }
 
-    public val variableNames: Set<String> by Delegates.lazy { variables.map { it.name }.toSet() }
+    public val variableNames: Set<String> = variables.map { it.name }.toSet()
+    public val variableNameList: List<String> = variableNames.toList()
+
 
     protected fun parseVariableName(rule: String): Pair<String, String> {
         return if (rule.contains(":")) {

@@ -25,6 +25,9 @@ public class RouteRuleTest {
     fun testVariableNames() {
         Assert.assertEquals(linkedSetOf<String>(), RouteRule("/").variableNames);
         Assert.assertEquals(linkedSetOf("name", "id"), RouteRule("/<name>/<id:Int>").variableNames);
+
+        Assert.assertEquals(listOf<String>(), RouteRule("/").variableNameList);
+        Assert.assertEquals(listOf("name", "id"), RouteRule("/<name>/<id:Int>").variableNameList);
     }
 
     Test
