@@ -71,7 +71,7 @@ public class IntegrationTest {
 
             route("/hello/<name>/<many:Int>") { name: String, many: Int ->
                 return@route Ul {
-                    many.times { li("Hello, ${name}!") }
+                    repeat(many) { li("Hello, ${name}!") }
                 }
             }
 

@@ -21,8 +21,8 @@ abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String)
     }
 
     public fun url(params: Map<String, Any>): String {
-        return absoluteRule.replaceAll("<([^>:]+)(:[^>]*)?>") {
-            val name = it.group(1)
+        return absoluteRule.replace("<([^>:]+)(:[^>]*)?>".toRegex()) {
+            val name = it.groups[1]!!.value
             if (name !in params) {
                 throw NotEnoughVariables("Missing variable <$name> for $absoluteRule")
             }

@@ -134,9 +134,9 @@ public class TestHttpServletRequest(url: String) : HttpServletRequest {
         url.getQuery()?.split('&')?.map {
             val (key, value) = it.split('=').map { URLDecoder.decode(it, "UTF-8") }
             if (key !in map) {
-                map[key] = array()
+                map[key] = arrayOf()
             }
-            map[key] = (map[key]!! + array(value)).copyToArray()
+            map[key] = (map[key]!! + arrayOf(value)).toTypedArray()
         }
         return map
     }

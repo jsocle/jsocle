@@ -7,8 +7,9 @@ private val variablePattenString = "<([^>]+)>"
 private val variablePattern = Pattern.compile(variablePattenString)
 
 public abstract class Rule(public val rule: String) {
-    protected val patternString: String =
-            rule.replaceAll(variablePattenString) { VARIABLE_MAP[parseVariableName(it.group(1)).second]!! }
+    protected val patternString: String = rule.replace(variablePattenString.toRegex()) {
+        VARIABLE_MAP[parseVariableName(it.groups[1]!!.value).second]!!
+    }
 
     public val variables: Set<Variable> = run {
         val matcher = variablePattern.matcher(rule)
@@ -26,7 +27,7 @@ public abstract class Rule(public val rule: String) {
 
     protected fun parseVariableName(rule: String): Pair<String, String> {
         return if (rule.contains(":")) {
-            val pair = rule.split(":", 2)
+            val pair = rule.split(":".toRegex(), 2)
             return pair[0] to pair[1]
         } else {
             rule to "String"

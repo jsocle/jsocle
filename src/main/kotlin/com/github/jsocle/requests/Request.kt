@@ -1,6 +1,6 @@
 package com.github.jsocle.requests
 
-public trait Request {
+public interface Request {
     public val pathVariables: Map<String, Any>
     public val url: String
     public val parameters: Map<String, List<String>>

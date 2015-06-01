@@ -81,7 +81,7 @@ public class RequestHandlerTest {
         Assert.assertEquals("/1/book/2", userBookController.show.url(2, "userId" to 1))
     }
 
-    Test(expected = javaClass<RequestHandler.NotEnoughVariables>())
+    Test(expected = RequestHandler.NotEnoughVariables::class)
     fun testNotEnoughVariables() {
         userBookController.list.url()
     }
