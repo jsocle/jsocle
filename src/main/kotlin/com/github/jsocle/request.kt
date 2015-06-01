@@ -1,5 +1,6 @@
 package com.github.jsocle
 
+import com.github.jsocle.requests.Request
 import kotlin.platform.platformStatic
 
 public class request {
@@ -7,13 +8,7 @@ public class request {
         private val local = ThreadLocal<com.github.jsocle.requests.Request>()
 
         private val r: com.github.jsocle.requests.Request
-            get() {
-                val request = local.get()
-                if (request == null) {
-                    throw UnsupportedOperationException("Not in request context.")
-                }
-                return request
-            }
+            get() = local.get() ?: throw UnsupportedOperationException("Not in request context.")
 
         fun push(request: com.github.jsocle.requests.Request) {
             if (local.get() != null) {
@@ -35,6 +30,8 @@ public class request {
         override val url: String get() = r.url
         platformStatic
         override val parameters: Map<String, List<String>> get() = r.parameters
+        platformStatic
+        override val method: Request.Method get() = r.method
         platformStatic
         override fun parameter(name: String): String? = r.parameter(name)
     }

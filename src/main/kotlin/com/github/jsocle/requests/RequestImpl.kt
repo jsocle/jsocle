@@ -5,7 +5,8 @@ import kotlin.properties.Delegates
 
 public class RequestImpl(public override val url: String,
                          public override val pathVariables: Map<String, Any>,
-                         private val httpServletRequest: HttpServletRequest) : Request {
+                         private val httpServletRequest: HttpServletRequest,
+                         public override val method: Request.Method) : Request {
     override fun parameter(name: String): String? {
         return parameters[name]?.firstOrNull()
     }

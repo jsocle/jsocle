@@ -1,6 +1,7 @@
 package com.github.jsocle
 
 import com.github.jsocle.html.elements.Ul
+import com.github.jsocle.requests.Request
 import org.junit.Assert
 import org.junit.Test
 
@@ -55,6 +56,10 @@ public class IntegrationTest {
     }
 
     object app : JSocle() {
+        val method = route("/method") { ->
+            return@route request.method.toString()
+        }
+
         init {
             route("/") { ->
                 return@route "Hello, World!"
@@ -92,6 +97,9 @@ public class IntegrationTest {
             Assert.assertEquals("licenseIndex", app.server.client.get("/faq/license").data)
 
             Assert.assertEquals("<ul><li><a href=\"/post/1\">tutorial</a></li></ul>", app.server.client.get("/post/").data)
+
+            Assert.assertEquals("GET", app.server.client.get(app.method.url()).data)
+            Assert.assertEquals("POST", app.server.client.get(app.method.url(), Request.Method.POST).data)
         } finally {
             app.stop()
         }

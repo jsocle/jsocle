@@ -2,6 +2,7 @@ package com.github.jsocle
 
 import com.github.jsocle.client.TestClient
 import com.github.jsocle.html.Node
+import com.github.jsocle.requests.Request
 import com.github.jsocle.requests.RequestHandlerMatchResult
 import com.github.jsocle.requests.RequestImpl
 import com.github.jsocle.server.JettyServer
@@ -45,14 +46,14 @@ public open class JSocle(staticPath: Path? = null) : JSocleApp() {
         server.stop()
     }
 
-    fun requestContext(req: HttpServletRequest, body: (request: RequestImpl?, result: RequestHandlerMatchResult?) -> Unit) {
+    fun requestContext(req: HttpServletRequest, method: Request.Method, body: (request: RequestImpl?, result: RequestHandlerMatchResult?) -> Unit) {
         val requestUri = URLDecoder.decode(req.getRequestURI(), "UTF-8")
         val result = findRequestHandler(requestUri)
         if (result == null) {
             body(null, null)
             return
         }
-        val request = RequestImpl(requestUri, result.pathVariables, req)
+        val request = RequestImpl(requestUri, result.pathVariables, req, method: Request.Method)
         com.github.jsocle.request.push(request)
         try {
             body(request, result)
@@ -61,8 +62,8 @@ public open class JSocle(staticPath: Path? = null) : JSocleApp() {
         }
     }
 
-    fun processRequest(req: HttpServletRequest, resp: HttpServletResponse) {
-        requestContext(req) { request, result ->
+    fun processRequest(req: HttpServletRequest, resp: HttpServletResponse, method: Request.Method) {
+        requestContext(req, method) { request, result ->
             if (request == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND)
                 return@requestContext
