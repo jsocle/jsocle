@@ -16,7 +16,19 @@ abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String)
         }
     }
 
-    public fun url(params: Map<String, Any>): String {
-        return absoluteRule.replaceAll("<([^>:]+)(:[^>]*)?>") { params[it.group(1)].toString() }
+    public fun url(vararg pairs: Pair<String, Any>): String {
+        return url(pairs.toList().toMap())
     }
+
+    public fun url(params: Map<String, Any>): String {
+        return absoluteRule.replaceAll("<([^>:]+)(:[^>]*)?>") {
+            val name = it.group(1)
+            if (name !in params) {
+                throw NotEnoughVariables("Missing variable <$name> for $absoluteRule")
+            }
+            params[name].toString()
+        }
+    }
+
+    public class NotEnoughVariables(message: String) : RuntimeException(message)
 }

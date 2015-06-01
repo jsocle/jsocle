@@ -28,12 +28,24 @@ public class RequestHandlerTest {
         val faq = route("/faq") { -> }
     }
 
+    object userBookController : Blueprint() {
+        val list = route("/") { -> }
+        val show = route("/<id:Int>") { id: Int -> }
+    }
+
+    object userController : Blueprint() {
+        init {
+            register(userBookController, urlPrefix = "/<userId:Int>/book")
+        }
+    }
+
     object app : JSocle() {
         val index = route("/") { -> }
         val showHotTopic = route("/hot-topic/<id:Int>") { id: Int -> }
 
         init {
             register(bookController, urlPrefix = "/books")
+            register(userController)
             register(etcController)
         }
     }
@@ -57,12 +69,20 @@ public class RequestHandlerTest {
 
     Test
     fun testUrl1() {
-        Assert.assertEquals("/hot-topic/1", app.showHotTopic.url(1));
+        Assert.assertEquals("/hot-topic/1", app.showHotTopic.url(1))
     }
 
     Test
     fun testNestedUrl1() {
         Assert.assertEquals("/", app.index.url())
-        Assert.assertEquals("/books/1", bookController.show.url(1));
+        Assert.assertEquals("/books/1", bookController.show.url(1))
+
+        Assert.assertEquals("/1/book/", userBookController.list.url("userId" to 1))
+        Assert.assertEquals("/1/book/2", userBookController.show.url(2, "userId" to 1))
+    }
+
+    Test(expected = javaClass<RequestHandler.NotEnoughVariables>())
+    fun testNotEnoughVariables() {
+        userBookController.list.url()
     }
 }

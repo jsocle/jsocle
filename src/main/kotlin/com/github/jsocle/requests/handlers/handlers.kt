@@ -22,6 +22,10 @@ public class RequestHandler1<R, P1>(app: JSocleApp, rule: String, private val ha
     }
 
     fun url(p1: P1): String {
-        return url(mapOf(rule.variableNameList[0] to p1))
+        return url(rule.variableNameList[0] to p1)
+    }
+
+    fun url(p1: P1, vararg variables: Pair<String, Any>): String {
+        return url(rule.variableNameList[0] to p1, *variables)
     }
 }
