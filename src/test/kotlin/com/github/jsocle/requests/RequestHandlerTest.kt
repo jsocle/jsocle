@@ -85,4 +85,9 @@ public class RequestHandlerTest {
     fun testNotEnoughVariables() {
         userBookController.list.url()
     }
+
+    Test
+    fun testQueryString() {
+        Assert.assertEquals("/?name=james", app.index.url("name" to "james"))
+    }
 }

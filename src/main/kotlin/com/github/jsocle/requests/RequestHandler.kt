@@ -2,6 +2,7 @@ package com.github.jsocle.requests
 
 import com.github.jsocle.Blueprint
 import com.github.jsocle.JSocleApp
+import java.net.URLEncoder
 import kotlin.properties.Delegates
 
 abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String) {
@@ -16,18 +17,34 @@ abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String)
         }
     }
 
+    private val absolutePathVariables by Delegates.lazy {
+        RouteRule(absoluteRule).variableNames
+    }
+
     public fun url(vararg pairs: Pair<String, Any>): String {
         return url(pairs.toList().toMap())
     }
 
     public fun url(params: Map<String, Any>): String {
-        return absoluteRule.replace("<([^>:]+)(:[^>]*)?>".toRegex()) {
+        val url = absoluteRule.replace("<([^>:]+)(:[^>]*)?>".toRegex()) {
             val name = it.groups[1]!!.value
             if (name !in params) {
                 throw NotEnoughVariables("Missing variable <$name> for $absoluteRule")
             }
             params[name].toString()
         }
+        return url + buildQueryString(params)
+    }
+
+    private fun buildQueryString(params: Map<String, Any>): String {
+        val queryParams = params.filter { it.key !in absolutePathVariables }
+        if (queryParams.size() == 0) {
+            return ""
+        }
+        val queryString = queryParams.map {
+            URLEncoder.encode(it.key, "UTF-8") + "=" + URLEncoder.encode(it.value.toString(), "UTF-8")
+        }.join("&")
+        return "?" + queryString
     }
 
     public class NotEnoughVariables(message: String) : RuntimeException(message)
