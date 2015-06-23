@@ -13,6 +13,7 @@ import org.eclipse.jetty.servlet.ServletHolder
 import java.net.URLDecoder
 import java.nio.file.Path
 import java.nio.file.Paths
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import kotlin.properties.Delegates
@@ -69,6 +70,7 @@ public open class JSocle(staticPath: Path? = null) : JSocleApp() {
                 return@requestContext
             }
             val response = result!!.handler.handle(request)
+            resp.addCookie(Cookie("session", request.session.serialize()));
             resp.getWriter().use {
                 when (response) {
                     is String -> it.print(response)

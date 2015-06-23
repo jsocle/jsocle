@@ -18,6 +18,8 @@ public class TestHttpServletResponse : HttpServletResponse {
 
     private val _printWriter = PrintWriter(_outputStream)
 
+    private val cookies = arrayListOf<Cookie>()
+
     override fun setContentLengthLong(len: Long) {
         throw UnsupportedOperationException()
     }
@@ -139,7 +141,9 @@ public class TestHttpServletResponse : HttpServletResponse {
     }
 
     override fun addCookie(cookie: Cookie?) {
-        throw UnsupportedOperationException()
+        if (cookie != null) {
+            cookies.add(cookie)
+        }
     }
 
     override fun addIntHeader(name: String?, value: Int) {

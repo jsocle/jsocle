@@ -55,6 +55,18 @@ public class IntegrationTest {
         }
     }
 
+    object sessionApp : Blueprint() {
+        val index = route("/") { ->
+            val counter = if (request.parameter("counter") != null) {
+                request.parameter("counter")!!
+            } else if ("counter" in request.session) {
+                request.session["counter"] as String
+            } else "0"
+            request.session["counter"] = (counter.toInt() + 1).toString()
+            return@route request.session["counter"]
+        }
+    }
+
     object app : JSocle() {
         val method = route("/method") { ->
             return@route request.method.toString()
@@ -78,6 +90,7 @@ public class IntegrationTest {
             register(faqApp, urlPrefix = "/faq")
             register(profileApp, urlPrefix = "/profile/<userId:Int>")
             register(postApp, urlPrefix = "/post")
+            register(sessionApp, urlPrefix = "/session")
         }
     }
 
@@ -100,6 +113,20 @@ public class IntegrationTest {
 
             Assert.assertEquals("GET", app.server.client.get(app.method.url()).data)
             Assert.assertEquals("POST", app.server.client.get(app.method.url(), Request.Method.POST).data)
+        } finally {
+            app.stop()
+        }
+    }
+
+    Test
+    fun testSessionIntegration() {
+        try {
+            app.run(onBackground = true)
+            val client = app.server.client
+            Assert.assertEquals("1", client.get(sessionApp.index.url()).data)
+            Assert.assertEquals("2", client.get(sessionApp.index.url()).data)
+
+            Assert.assertEquals("100", client.get(sessionApp.index.url("counter" to 99)).data)
         } finally {
             app.stop()
         }

@@ -11,6 +11,7 @@ import javax.servlet.http.*
 
 public class TestHttpServletRequest(url: String) : HttpServletRequest {
     private val url: URL
+    private val _cookies = listOf<Cookie>()
 
     init {
         val prefix = if (url.startsWith("http://")) {
@@ -234,7 +235,7 @@ public class TestHttpServletRequest(url: String) : HttpServletRequest {
     }
 
     override fun getCookies(): Array<out Cookie>? {
-        throw UnsupportedOperationException()
+        return _cookies.toTypedArray()
     }
 
     override fun isRequestedSessionIdFromCookie(): Boolean {
