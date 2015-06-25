@@ -9,9 +9,9 @@ import java.util.Locale
 import javax.servlet.*
 import javax.servlet.http.*
 
-public class TestHttpServletRequest(url: String) : HttpServletRequest {
+public class TestHttpServletRequest(url: String, cookies: List<Cookie>?) : HttpServletRequest {
     private val url: URL
-    private val _cookies = listOf<Cookie>()
+    private val _cookies = cookies ?: listOf<Cookie>()
 
     init {
         val prefix = if (url.startsWith("http://")) {

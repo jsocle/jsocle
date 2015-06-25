@@ -3,6 +3,7 @@ package com.github.jsocle.client
 import com.github.jsocle.response.Response
 import java.io.ByteArrayOutputStream
 import java.io.PrintWriter
+import java.util.ArrayList
 import java.util.Locale
 import javax.servlet.ServletOutputStream
 import javax.servlet.http.Cookie
@@ -18,7 +19,7 @@ public class TestHttpServletResponse : HttpServletResponse {
 
     private val _printWriter = PrintWriter(_outputStream)
 
-    private val cookies = arrayListOf<Cookie>()
+    public val cookies: ArrayList<Cookie> = arrayListOf()
 
     override fun setContentLengthLong(len: Long) {
         throw UnsupportedOperationException()

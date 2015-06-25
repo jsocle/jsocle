@@ -19,7 +19,7 @@ public class RequestImpl(public override val url: String,
 
     override val parameters: Map<String, List<String>> by Delegates.lazy {
         (httpServletRequest.getParameterMap() ?: mapOf<String, Array<String>>())
-                .map { it.getKey() to it.getValue().toList() }
+                .map { it.getKey() to it.getValue().map { it.toString() } }
                 .toMap()
     }
 }
