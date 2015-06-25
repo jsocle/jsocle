@@ -1,16 +1,16 @@
 package com.github.jsocle.requests
 
+import com.github.jsocle.JSocle
 import com.github.jsocle.requests.session.Session
-import com.github.jsocle.requests.session.StringSession
 import javax.servlet.http.HttpServletRequest
 import kotlin.properties.Delegates
 
 public class RequestImpl(public override val url: String,
                          public override val pathVariables: Map<String, Any>,
                          private val httpServletRequest: HttpServletRequest,
-                         public override val method: Request.Method) : Request {
+                         public override val method: Request.Method, val app: JSocle) : Request {
     public override val session: Session by Delegates.lazy { ->
-        StringSession(httpServletRequest.getCookies()?.firstOrNull { it.getName() == "session" })
+        app.buildSession(httpServletRequest.getCookies()?.firstOrNull { it.getName() == "session" }?.getValue())
     }
 
     override fun parameter(name: String): String? {

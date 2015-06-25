@@ -73,6 +73,7 @@ public class IntegrationTest {
         }
 
         init {
+            config.secretKey = "secret_key"
             route("/") { ->
                 return@route "Hello, World!"
             }

@@ -19,6 +19,7 @@ public class TestClientTest {
     object app : JSocle() {
 
         init {
+            config.secretKey = "secret"
             route("/") { ->
                 return@route "index"
             }

@@ -1,5 +1,6 @@
 package com.github.jsocle.requests.session
 
+import com.github.jsocle.JScoleConfig
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.net.URLDecoder
@@ -19,10 +20,10 @@ val String.decodeURL: String
         return URLDecoder.decode(this, "UTF-8")
     }
 
-public class StringSession(cookie: Cookie?) : Session(cookie) {
+public class StringSession(cookie: String?, val config: JScoleConfig) : Session() {
     private val map = deserialize(cookie) ?: hashMapOf()
 
-    private fun deserialize(cookie: Cookie?): MutableMap<String, String>? {
+    private fun deserialize(cookie: String?): MutableMap<String, String>? {
         val bytes = decode(cookie) ?: return null
         ByteArrayInputStream(bytes).use {
             InflaterInputStream(it).use {
@@ -41,13 +42,13 @@ public class StringSession(cookie: Cookie?) : Session(cookie) {
         }
     }
 
-    private fun decode(cookie: Cookie?): ByteArray? {
+    private fun decode(cookie: String?): ByteArray? {
         if (cookie == null) {
             return null
         }
 
         try {
-            return Base64.getUrlDecoder().decode(cookie.getValue())
+            return Base64.getUrlDecoder().decode(cookie)
         } catch (e: IllegalArgumentException) {
             return null
         }
@@ -56,6 +57,7 @@ public class StringSession(cookie: Cookie?) : Session(cookie) {
     override fun contains(name: String): Boolean = name in map
 
     override fun set(name: String, value: Any) {
+        config.secretKeySpec
         if (value !is String) {
             throw UnsupportedOperationException("String Session only support string values")
         }

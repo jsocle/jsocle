@@ -5,6 +5,8 @@ import com.github.jsocle.html.Node
 import com.github.jsocle.requests.Request
 import com.github.jsocle.requests.RequestHandlerMatchResult
 import com.github.jsocle.requests.RequestImpl
+import com.github.jsocle.requests.session.Session
+import com.github.jsocle.requests.session.StringSession
 import com.github.jsocle.server.JettyServer
 import com.github.jsocle.servlet.JSocleHttpServlet
 import org.eclipse.jetty.servlet.DefaultServlet
@@ -18,11 +20,13 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import kotlin.properties.Delegates
 
-public open class JSocle(staticPath: Path? = null) : JSocleApp() {
+public open class JSocle(config: JScoleConfig? = null, staticPath: Path? = null) : JSocleApp() {
     public var server: JettyServer by Delegates.notNull()
         private set
     public val client: TestClient
         get() = TestClient(this)
+
+    public val config: JScoleConfig = config ?: JScoleConfig()
 
     private val servlet = JSocleHttpServlet(this)
     private val rootPath = Paths.get(".").toAbsolutePath()
@@ -54,7 +58,7 @@ public open class JSocle(staticPath: Path? = null) : JSocleApp() {
             body(null, null)
             return
         }
-        val request = RequestImpl(requestUri, result.pathVariables, req, method)
+        val request = RequestImpl(requestUri, result.pathVariables, req, method, this)
         com.github.jsocle.request.push(request)
         try {
             body(request, result)
@@ -81,5 +85,9 @@ public open class JSocle(staticPath: Path? = null) : JSocleApp() {
             }
 
         }
+    }
+
+    public fun buildSession(cookie: String?): Session {
+        return StringSession(cookie, config)
     }
 }
