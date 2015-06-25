@@ -30,7 +30,7 @@ public class StringSession(cookie: String?, val config: JScoleConfig) : Session(
                 it.reader()use {
                     return it.readText()
                             .split('&')
-                            .map { it.split("=", 2) }
+                            .map { it.split('=', limit = 2) }
                             .filter { it.size() == 2 }
                             .map {
                                 val (key, value) = it.map { it.decodeURL }
