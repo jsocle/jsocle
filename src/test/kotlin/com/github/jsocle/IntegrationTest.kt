@@ -73,7 +73,7 @@ public class IntegrationTest {
         }
 
         init {
-            config.secretKey = "secret_key"
+            config.secretKey = "secret_key".toByteArray()
             route("/") { ->
                 return@route "Hello, World!"
             }

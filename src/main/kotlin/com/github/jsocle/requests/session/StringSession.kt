@@ -1,14 +1,14 @@
 package com.github.jsocle.requests.session
 
 import com.github.jsocle.JScoleConfig
+import org.apache.commons.codec.digest.HmacUtils
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.net.URLDecoder
 import java.net.URLEncoder
-import java.util.Base64
+import java.util.*
 import java.util.zip.DeflaterOutputStream
 import java.util.zip.InflaterInputStream
-import javax.servlet.http.Cookie
 
 val String.urlEncoded: String
     get() {
@@ -19,6 +19,22 @@ val String.decodeURL: String
     get() {
         return URLDecoder.decode(this, "UTF-8")
     }
+
+val String.decodeBase64UrlSafe: ByteArray
+    get() {
+        return Base64.getUrlDecoder().decode(this)
+    }
+
+val ByteArray.encodeBase64UrlSafe: String
+    get() {
+        return Base64.getUrlEncoder().encodeToString(this)
+    }
+
+val List<Byte>.encodeBase64UrlSafe: String
+    get() {
+        return this.toByteArray().encodeBase64UrlSafe
+    }
+
 
 public class StringSession(cookie: String?, val config: JScoleConfig) : Session() {
     private val map = deserialize(cookie) ?: hashMapOf()
@@ -43,12 +59,14 @@ public class StringSession(cookie: String?, val config: JScoleConfig) : Session(
     }
 
     private fun decode(cookie: String?): ByteArray? {
-        if (cookie == null) {
+        val pair = cookie?.split('.', limit = 2)
+        if (pair?.size() ?: 0 != 2) {
             return null
         }
-
+        val (base64EncodedValue, mac) = pair
         try {
-            return Base64.getUrlDecoder().decode(cookie)
+            val value = base64EncodedValue.decodeBase64UrlSafe
+            return if (Arrays.equals(hashValue(value), mac.decodeBase64UrlSafe)) value else null
         } catch (e: IllegalArgumentException) {
             return null
         }
@@ -68,13 +86,18 @@ public class StringSession(cookie: String?, val config: JScoleConfig) : Session(
         return map[name] as String
     }
 
-    override fun serialize(): String {
-        val compressed = ByteArrayOutputStream().use {
+    override fun serialize(): String? {
+        if (map.isEmpty()) {
+            return null;
+        }
+        val value = ByteArrayOutputStream().use {
             DeflaterOutputStream(it).writer().use { writer ->
                 map.forEach { writer.write("${it.key.urlEncoded}=${it.value.urlEncoded}") }
             }
             it
         }.toByteArray()
-        return Base64.getUrlEncoder().encodeToString(compressed)!!
+        return "${value.encodeBase64UrlSafe}.${hashValue(value).encodeBase64UrlSafe}"
     }
+
+    private fun hashValue(value: ByteArray?) = HmacUtils.hmacSha256(config.secretKey, value)
 }
