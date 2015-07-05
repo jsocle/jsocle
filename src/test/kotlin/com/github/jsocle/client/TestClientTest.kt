@@ -17,7 +17,6 @@ public class TestClientTest {
     }
 
     object app : JSocle() {
-
         init {
             config.secretKey = "secret".toByteArray()
             route("/") { ->
