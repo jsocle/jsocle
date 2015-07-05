@@ -75,10 +75,11 @@ public class StringSession(cookie: String?, val config: JScoleConfig) : Session(
     override fun contains(name: String): Boolean = name in map
 
     override fun set(name: String, value: Any) {
-        config.secretKeySpec
         if (value !is String) {
             throw UnsupportedOperationException("String Session only support string values")
         }
+        // check secretKey is defined
+        config.secretKey
         map[name] = value
     }
 
