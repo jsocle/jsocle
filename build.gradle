@@ -14,7 +14,7 @@ buildscript {
 apply plugin: 'kotlin'
 apply plugin: "maven"
 
-version = "0.0.2"
+group = "com.github.jsocle"
 
 repositories {
     mavenCentral()
@@ -30,7 +30,7 @@ dependencies {
             "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version",
             "org.eclipse.jetty:jetty-server:$jettyVersion",
             "org.eclipse.jetty:jetty-servlet:$jettyVersion",
-            'com.github.jsocle:jsocle-html:4f4e4531bf',
+            'com.github.jsocle:jsocle-html:0.0.2',
             'commons-codec:commons-codec:1.10'
 }
 
