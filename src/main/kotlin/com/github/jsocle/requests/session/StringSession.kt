@@ -1,6 +1,6 @@
 package com.github.jsocle.requests.session
 
-import com.github.jsocle.JScoleConfig
+import com.github.jsocle.JSocleConfig
 import org.apache.commons.codec.digest.HmacUtils
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -36,7 +36,7 @@ val List<Byte>.encodeBase64UrlSafe: String
     }
 
 
-public class StringSession(cookie: String?, val config: JScoleConfig) : Session() {
+public class StringSession(cookie: String?, val config: JSocleConfig) : Session() {
     private val map = deserialize(cookie) ?: hashMapOf()
 
     private fun deserialize(cookie: String?): MutableMap<String, String>? {

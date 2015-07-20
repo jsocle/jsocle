@@ -20,13 +20,13 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import kotlin.properties.Delegates
 
-public open class JSocle(config: JScoleConfig? = null, staticPath: Path? = null) : JSocleApp() {
+public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null) : JSocleApp() {
     public var server: JettyServer by Delegates.notNull()
         private set
     public val client: TestClient
         get() = TestClient(this)
 
-    public val config: JScoleConfig = config ?: JScoleConfig()
+    public val config: JSocleConfig = config ?: JSocleConfig()
 
     private val servlet = JSocleHttpServlet(this)
     private val rootPath = Paths.get(".").toAbsolutePath()
