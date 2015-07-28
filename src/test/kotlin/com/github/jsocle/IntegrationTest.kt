@@ -1,5 +1,7 @@
 package com.github.jsocle
 
+import com.github.jsocle.form.Form
+import com.github.jsocle.form.StringField
 import com.github.jsocle.html.elements.Ul
 import com.github.jsocle.requests.Request
 import org.junit.Assert
@@ -40,6 +42,13 @@ public class IntegrationTest {
 
         val show = route("/<id:Int>") { id: Int ->
             return@route posts.first { it.id == id }.title
+        }
+
+        val edit = route("/<id:Int>/edit") { id: Int ->
+            val form = object : Form() {
+                val title by StringField()
+            }
+            form.title.render { maxlength = "100" }
         }
 
         init {
@@ -97,9 +106,7 @@ public class IntegrationTest {
 
     Test
     fun testIntegrate() {
-        app.run(onBackground = true)
-
-        try {
+        app.run {
             Assert.assertEquals("Hello, World!", app.server.client.get("/").data)
             Assert.assertEquals("Hello, Steve Jobs!", app.server.client.get("/hello/Steve%20Jobs").data)
             Assert.assertEquals(
@@ -114,22 +121,27 @@ public class IntegrationTest {
 
             Assert.assertEquals("GET", app.server.client.get(app.method.url()).data)
             Assert.assertEquals("POST", app.server.client.get(app.method.url(), Request.Method.POST).data)
-        } finally {
-            app.stop()
         }
     }
 
     Test
     fun testSessionIntegration() {
-        try {
-            app.run(onBackground = true)
+        app.run {
             val client = app.server.client
             Assert.assertEquals("1", client.get(sessionApp.index.url()).data)
             Assert.assertEquals("2", client.get(sessionApp.index.url()).data)
 
             Assert.assertEquals("100", client.get(sessionApp.index.url("counter" to 99)).data)
-        } finally {
-            app.stop()
+        }
+    }
+
+    Test
+    fun testForm() {
+        app.run {
+            val client = app.server.client
+            Assert.assertEquals(
+                    """<input maxlength="100" name="title" type="text">""", client.get(postApp.edit.url(1)).data
+            )
         }
     }
 }

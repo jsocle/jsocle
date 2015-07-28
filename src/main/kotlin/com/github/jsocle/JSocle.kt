@@ -32,7 +32,8 @@ public open class JSocle(config: JScoleConfig? = null, staticPath: Path? = null)
     private val rootPath = Paths.get(".").toAbsolutePath()
     private val staticPath = staticPath ?: rootPath.resolve("static")
 
-    public fun run(port: Int = 8080, onBackground: Boolean = false) {
+    jvmOverloads
+    public fun run(port: Int = 8080, withIn: JSocle.() -> Unit = { server.join() }) {
         server = JettyServer(port)
         val servletContextHandler = ServletContextHandler()
         servletContextHandler.setContextPath("/")
@@ -42,8 +43,12 @@ public open class JSocle(config: JScoleConfig? = null, staticPath: Path? = null)
 
         server.setHandler(servletContextHandler)
         server.start()
-        if (!onBackground) {
-            server.join()
+        try {
+            withIn()
+        } finally {
+            if (server.isRunning()) {
+                server.stop()
+            }
         }
     }
 
@@ -89,5 +94,11 @@ public open class JSocle(config: JScoleConfig? = null, staticPath: Path? = null)
 
     public fun buildSession(cookie: String?): Session {
         return StringSession(cookie, config)
+    }
+
+    companion object {
+        init {
+            com.github.jsocle.form.request.parameters = { request.servlet.getParameterMap() }
+        }
     }
 }

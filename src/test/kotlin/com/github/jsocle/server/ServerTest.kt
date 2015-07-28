@@ -10,9 +10,9 @@ class ServerTest {
 
     Test
     fun testStatic() {
-        app.run(onBackground = true)
-        Assert.assertEquals("Hello, world!", app.server.client.get("/static/").data)
-        app.stop()
+        app.run {
+            Assert.assertEquals("Hello, world!", app.server.client.get("/static/").data)
+        }
     }
 }
 

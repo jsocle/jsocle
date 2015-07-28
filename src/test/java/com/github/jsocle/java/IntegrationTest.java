@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class IntegrationTest {
     public static void main(String[] ar) {
-        new App().run(8080, false);
+        new App().run(8080);
     }
 
     @Test

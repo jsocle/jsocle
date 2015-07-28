@@ -2,6 +2,7 @@ package com.github.jsocle
 
 import com.github.jsocle.requests.Request
 import com.github.jsocle.requests.session.Session
+import javax.servlet.http.HttpServletRequest
 import kotlin.platform.platformStatic
 
 public class request {
@@ -34,8 +35,10 @@ public class request {
         platformStatic
         override val method: Request.Method get() = r.method
         platformStatic
-        public override val session: Session
-            get() = r.session
+        public override val session: Session get() = r.session
+        platformStatic
+        override val servlet: HttpServletRequest get() = r.servlet
+
         platformStatic
         override fun parameter(name: String): String? = r.parameter(name)
     }
