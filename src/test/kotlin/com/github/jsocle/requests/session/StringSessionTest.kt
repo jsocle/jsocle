@@ -1,19 +1,19 @@
 package com.github.jsocle.requests.session
 
-import com.github.jsocle.JScoleConfig
+import com.github.jsocle.JSocleConfig
 import org.junit.Assert
 import org.junit.Test
 
 public class StringSessionTest {
     Test(expected = UnsupportedOperationException::class)
     fun testUnsupportedError() {
-        val session = StringSession(null, JScoleConfig())
+        val session = StringSession(null, JSocleConfig())
         session["name"] = "John"
     }
 
     Test
     fun testSecure() {
-        val jScoleConfig = JScoleConfig("Secret key".toByteArray())
+        val jScoleConfig = JSocleConfig("Secret key".toByteArray())
         val sessionForSerialize = StringSession(null, jScoleConfig)
         sessionForSerialize["name"] = "John"
         val serialized = sessionForSerialize.serialize()!!
