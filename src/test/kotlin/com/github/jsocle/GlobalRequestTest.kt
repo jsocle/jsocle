@@ -4,13 +4,11 @@ import org.junit.Assert
 import org.junit.Test
 
 public class GlobalRequestTest {
-    Test
+    @Test
     fun testRequestGlobal() {
         val app = object : JSocle() {
             init {
-                route("/<name>") { name: String ->
-                    return@route "${request.pathVariables["name"]}"
-                }
+                route("/<name>") { name: String -> "${request.pathVariables["name"]}" }
             }
         }
 

@@ -12,7 +12,7 @@ public class RequestContextTest {
         }
     }
 
-    Test
+    @Test
     fun testContext() {
         app.client.get("/") {
             Assert.assertEquals("/", request.url)

@@ -3,15 +3,13 @@ package com.github.jsocle.client
 import com.github.jsocle.response.Response
 import java.io.ByteArrayOutputStream
 import java.io.PrintWriter
-import java.util.ArrayList
-import java.util.Locale
+import java.util.*
 import javax.servlet.ServletOutputStream
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
-import kotlin.properties.Delegates
 
 public class TestHttpServletResponse : HttpServletResponse {
-    public val response: Response by Delegates.lazy {
+    public val response: Response by lazy(LazyThreadSafetyMode.NONE) {
         TestClientResponse(_outputStream.toString("UTF-8"))
     }
 

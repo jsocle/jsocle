@@ -3,7 +3,6 @@ package com.github.jsocle
 import com.github.jsocle.requests.Request
 import com.github.jsocle.requests.session.Session
 import javax.servlet.http.HttpServletRequest
-import kotlin.platform.platformStatic
 
 public class request {
     companion object request : com.github.jsocle.requests.Request {
@@ -26,20 +25,20 @@ public class request {
             local.remove()
         }
 
-        platformStatic
+        @JvmStatic
         override val pathVariables: Map<String, Any> get() = r.pathVariables
-        platformStatic
+        @JvmStatic
         override val url: String get() = r.url
-        platformStatic
+        @JvmStatic
         override val parameters: Map<String, List<String>> get() = r.parameters
-        platformStatic
+        @JvmStatic
         override val method: Request.Method get() = r.method
-        platformStatic
+        @JvmStatic
         public override val session: Session get() = r.session
-        platformStatic
+        @JvmStatic
         override val servlet: HttpServletRequest get() = r.servlet
 
-        platformStatic
+        @JvmStatic
         override fun parameter(name: String): String? = r.parameter(name)
     }
 }

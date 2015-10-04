@@ -6,7 +6,7 @@ import com.github.jsocle.requests.RequestHandlerMatchResult
 import com.github.jsocle.requests.RequestImpl
 import com.github.jsocle.requests.handlers.RequestHandler0
 import com.github.jsocle.requests.handlers.RequestHandler1
-import java.util.ArrayList
+import java.util.*
 
 public abstract class JSocleApp {
     protected val requestHandlers: ArrayList<RequestHandler<*>> = arrayListOf()
@@ -26,7 +26,7 @@ public abstract class JSocleApp {
 
     public fun <P1, P2, R> route(rule: String, handler: (p1: P1, p2: P2) -> R): RequestHandler<R> {
         val rh = object : RequestHandler<R>(this, rule) {
-            suppress("UNCHECKED_CAST")
+            @Suppress("UNCHECKED_CAST")
             override fun handle(request: RequestImpl): R {
                 val variableNames = this.rule.variableNameList
                 val p1 = request.pathVariables[variableNames[0]] as P1
@@ -45,23 +45,25 @@ public abstract class JSocleApp {
 
 
     public fun findRequestHandler(uri: String): RequestHandlerMatchResult? {
-        val matchResult = requestHandlers.firstMapNotNull {
-            val pathVariables = it.rule.match(uri)
-            if (pathVariables != null) RequestHandlerMatchResult(it, pathVariables) else null
+        for (requestHandler in requestHandlers) {
+            val pathVariables = requestHandler.rule.match(uri)
+            if (pathVariables != null) {
+                return RequestHandlerMatchResult(requestHandler, pathVariables)
+            }
         }
-        if (matchResult != null) {
-            return matchResult
+        for (child in children) {
+            val matchResult = findChildRequestHandler(child, uri)
+            if (matchResult != null) {
+                return matchResult
+            }
         }
-        return children.firstMapNotNull { findChildRequestHandler(it, uri) }
+        return null
     }
 
     protected fun findChildRequestHandler(child: Bridge, uri: String): RequestHandlerMatchResult? {
         val rule = child.rule
         if (rule != null) {
-            val result = rule.match(uri)
-            if (result == null) {
-                return null;
-            }
+            val result = rule.match(uri) ?: return null
 
             val handlerResult = child.app.findRequestHandler(result.uri)
             if (handlerResult != null) {
@@ -76,6 +78,7 @@ public abstract class JSocleApp {
 
     public class Bridge(public val app: Blueprint, public val parent: JSocleApp, urlPrefix: String?) {
         public val rule: PrefixRule? = if (urlPrefix != null) PrefixRule(urlPrefix) else null
+
         init {
             app.bridge = this
         }

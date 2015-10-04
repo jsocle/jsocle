@@ -8,18 +8,16 @@ import org.junit.Test
 public class RequestTest {
     private object app : JSocle() {
         init {
-            route("/") { ->
-                return@route request.url
-            }
+            route("/") { -> request.url }
         }
     }
 
-    Test
+    @Test
     fun testUrl() {
         Assert.assertEquals("/", app.client.get("/").data)
     }
 
-    Test
+    @Test
     fun testParameters() {
         app.client.get("/") {
             Assert.assertEquals(mapOf<String, List<String>>(), request.parameters)
@@ -30,7 +28,7 @@ public class RequestTest {
         }
     }
 
-    Test
+    @Test
     fun testParameter() {
         app.client.get("/") {
             Assert.assertEquals(null, request.parameter("name"))

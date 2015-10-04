@@ -1,7 +1,7 @@
 package com.github.jsocle
 
 import com.github.jsocle.form.Form
-import com.github.jsocle.form.StringField
+import com.github.jsocle.form.fields.StringField
 import com.github.jsocle.html.elements.Ul
 import com.github.jsocle.requests.Request
 import org.junit.Assert
@@ -88,12 +88,12 @@ public class IntegrationTest {
             }
 
             route("/hello/<name>") { name: String ->
-                return@route "Hello, ${name}!"
+                return@route "Hello, $name!"
             }
 
             route("/hello/<name>/<many:Int>") { name: String, many: Int ->
                 return@route Ul {
-                    repeat(many) { li("Hello, ${name}!") }
+                    repeat(many) { li("Hello, $name!") }
                 }
             }
 
@@ -104,7 +104,7 @@ public class IntegrationTest {
         }
     }
 
-    Test
+    @Test
     fun testIntegrate() {
         app.run {
             Assert.assertEquals("Hello, World!", app.server.client.get("/").data)
@@ -124,7 +124,7 @@ public class IntegrationTest {
         }
     }
 
-    Test
+    @Test
     fun testSessionIntegration() {
         app.run {
             val client = app.server.client
@@ -135,7 +135,7 @@ public class IntegrationTest {
         }
     }
 
-    Test
+    @Test
     fun testForm() {
         app.run {
             val client = app.server.client

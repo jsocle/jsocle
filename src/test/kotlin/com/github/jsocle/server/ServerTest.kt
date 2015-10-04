@@ -8,7 +8,7 @@ import org.junit.Test
 class ServerTest {
     object app : JSocle(staticPath = staticPath)
 
-    Test
+    @Test
     fun testStatic() {
         app.run {
             Assert.assertEquals("Hello, world!", app.server.client.get("/static/").data)
@@ -19,13 +19,9 @@ class ServerTest {
 fun main(args: Array<String>) {
     val app = object : JSocle(staticPath = staticPath) {
         init {
-            route("/") { ->
-                return@route "Hello, world!"
-            }
+            route("/") { -> "Hello, world!" }
 
-            route("/users/<name>") { name: String ->
-                return@route "Hello, ${name}"
-            }
+            route("/users/<name>") { name: String -> "Hello, $name" }
         }
     }
     app.run()

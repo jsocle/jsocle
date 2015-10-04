@@ -4,14 +4,14 @@ import org.junit.Assert
 import org.junit.Test
 
 public class RouteRuleTest {
-    Test
+    @Test
     fun testUriMatch() {
         val rule = RouteRule("/")
         Assert.assertEquals(linkedMapOf<String, Any>(), rule.match("/"))
         Assert.assertNull(rule.match("/page"))
     }
 
-    Test
+    @Test
     fun testPathVariables() {
         Assert.assertEquals(null, RouteRule("/<name>").match("/"))
         Assert.assertEquals(linkedMapOf("name" to "steve jobs"), RouteRule("/<name>").match("/steve jobs"))
@@ -21,7 +21,7 @@ public class RouteRuleTest {
         )
     }
 
-    Test
+    @Test
     fun testVariableNames() {
         Assert.assertEquals(linkedSetOf<String>(), RouteRule("/").variableNames);
         Assert.assertEquals(linkedSetOf("name", "id"), RouteRule("/<name>/<id:Int>").variableNames);
@@ -30,7 +30,7 @@ public class RouteRuleTest {
         Assert.assertEquals(listOf("name", "id"), RouteRule("/<name>/<id:Int>").variableNameList);
     }
 
-    Test
+    @Test
     fun testInt() {
         Assert.assertEquals(null, RouteRule("/<id:Int>").match("/name"))
         Assert.assertEquals(linkedMapOf("id" to 1), RouteRule("/<id:Int>").match("/1"))

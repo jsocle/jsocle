@@ -1,10 +1,9 @@
 package com.github.jsocle.requests
 
 import java.util.regex.Pattern
-import kotlin.properties.Delegates
 
 public class RouteRule(rule: String) : Rule(rule) {
-    private val pattern: Pattern by Delegates.lazy {
+    private val pattern: Pattern by lazy(LazyThreadSafetyMode.NONE) {
         Pattern.compile("^$patternString$")
     }
 

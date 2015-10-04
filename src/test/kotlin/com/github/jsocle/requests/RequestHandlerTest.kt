@@ -50,29 +50,29 @@ public class RequestHandlerTest {
         }
     }
 
-    Test
+    @Test
     fun testUrl() {
         Assert.assertEquals("/", app.index.url())
     }
 
-    Test
+    @Test
     fun testNestedUrl() {
         Assert.assertEquals("/books/", bookController.list.url())
         Assert.assertEquals("/books/faq/", bookFaqController.index.url())
     }
 
-    Test
+    @Test
     fun testNestedWithoutPrefixUrl() {
         Assert.assertEquals("/faq", etcController.faq.url())
         Assert.assertEquals("/books/isdn", bookEtcController.isdnList.url())
     }
 
-    Test
+    @Test
     fun testUrl1() {
         Assert.assertEquals("/hot-topic/1", app.showHotTopic.url(1))
     }
 
-    Test
+    @Test
     fun testNestedUrl1() {
         Assert.assertEquals("/", app.index.url())
         Assert.assertEquals("/books/1", bookController.show.url(1))
@@ -81,12 +81,12 @@ public class RequestHandlerTest {
         Assert.assertEquals("/1/book/2", userBookController.show.url(2, "userId" to 1))
     }
 
-    Test(expected = RequestHandler.NotEnoughVariables::class)
+    @Test(expected = RequestHandler.NotEnoughVariables::class)
     fun testNotEnoughVariables() {
         userBookController.list.url()
     }
 
-    Test
+    @Test
     fun testQueryString() {
         Assert.assertEquals("/?name=james", app.index.url("name" to "james"))
     }

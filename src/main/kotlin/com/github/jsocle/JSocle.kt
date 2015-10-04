@@ -32,32 +32,28 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
     private val rootPath = Paths.get(".").toAbsolutePath()
     private val staticPath = staticPath ?: rootPath.resolve("static")
 
-    jvmOverloads
+    @JvmOverloads
     public fun run(port: Int = 8080, withIn: JSocle.() -> Unit = { server.join() }) {
         server = JettyServer(port)
         val servletContextHandler = ServletContextHandler()
-        servletContextHandler.setContextPath("/")
-        servletContextHandler.setResourceBase(staticPath.getParent().toString())
+        servletContextHandler.contextPath = "/"
+        servletContextHandler.resourceBase = staticPath.parent.toString()
         servletContextHandler.addServlet(ServletHolder(DefaultServlet()), "/static/*")
         servletContextHandler.addServlet(ServletHolder(servlet), "/*")
 
-        server.setHandler(servletContextHandler)
+        server.handler = servletContextHandler
         server.start()
         try {
             withIn()
         } finally {
-            if (server.isRunning()) {
+            if (server.isRunning) {
                 server.stop()
             }
         }
     }
 
-    public fun stop() {
-        server.stop()
-    }
-
     fun requestContext(req: HttpServletRequest, method: Request.Method, body: (request: RequestImpl?, result: RequestHandlerMatchResult?) -> Unit) {
-        val requestUri = URLDecoder.decode(req.getRequestURI(), "UTF-8")
+        val requestUri = URLDecoder.decode(req.requestURI, "UTF-8")
         val result = findRequestHandler(requestUri)
         if (result == null) {
             body(null, null)
@@ -80,7 +76,7 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
             }
             val response = result!!.handler.handle(request)
             resp.addCookie(Cookie("session", request.session.serialize()));
-            resp.getWriter().use {
+            resp.writer.use {
                 when (response) {
                     is String -> it.print(response)
                     is Node -> response.render(it)
@@ -98,7 +94,7 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
 
     companion object {
         init {
-            com.github.jsocle.form.request.parameters = { request.servlet.getParameterMap() }
+            com.github.jsocle.form.request.parameters = { request.servlet.parameterMap }
         }
     }
 }

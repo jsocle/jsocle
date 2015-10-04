@@ -1,10 +1,9 @@
 package com.github.jsocle.requests
 
 import java.util.regex.Pattern
-import kotlin.properties.Delegates
 
 public class PrefixRule(rule: String) : Rule(rule) {
-    private val pattern by Delegates.lazy { Pattern.compile("^$patternString") }
+    private val pattern by lazy(LazyThreadSafetyMode.NONE) { Pattern.compile("^$patternString") }
 
     public fun match(uri: String): MatchResult? {
         val matcher = pattern.matcher(uri)

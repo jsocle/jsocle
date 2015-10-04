@@ -3,12 +3,11 @@ package com.github.jsocle.requests
 import com.github.jsocle.Blueprint
 import com.github.jsocle.JSocleApp
 import java.net.URLEncoder
-import kotlin.properties.Delegates
 
 abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String) {
     public val rule: RouteRule = RouteRule(rule)
     abstract fun handle(request: RequestImpl): R
-    protected val absoluteRule: String by Delegates.lazy {
+    protected val absoluteRule: String by lazy(LazyThreadSafetyMode.NONE) {
         val app = this.app
         if (app is Blueprint) {
             app.urlPrefixes + this.rule.rule
@@ -17,7 +16,7 @@ abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String)
         }
     }
 
-    private val absolutePathVariables by Delegates.lazy {
+    private val absolutePathVariables by lazy(LazyThreadSafetyMode.NONE) {
         RouteRule(absoluteRule).variableNames
     }
 

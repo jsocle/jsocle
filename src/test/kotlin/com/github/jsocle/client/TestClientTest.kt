@@ -8,12 +8,8 @@ import org.junit.Test
 
 public class TestClientTest {
     object sessionApp : Blueprint() {
-        val get = route("/get") { ->
-            return@route request.session["store"] as String
-        }
-        val set = route("/set") { ->
-            request.session["store"] = request.parameter("store")!!
-        }
+        val get = route("/get") { -> request.session["store"] as String }
+        val set = route("/set") { -> request.session["store"] = request.parameter("store")!! }
     }
 
     object app : JSocle() {
@@ -26,12 +22,12 @@ public class TestClientTest {
         }
     }
 
-    Test
+    @Test
     fun testGet() {
         Assert.assertEquals("index", app.client.get("/").data)
     }
 
-    Test
+    @Test
     fun testStringSession() {
         val client = app.client
         client.get(sessionApp.set.url("store" to "a value"))

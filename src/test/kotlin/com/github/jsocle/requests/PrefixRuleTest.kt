@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 
 public class PrefixRuleTest {
-    Test
+    @Test
     fun testPrefix() {
         val prefixRule = PrefixRule("/user")
         Assert.assertEquals(null, prefixRule.match("/"))
@@ -12,7 +12,7 @@ public class PrefixRuleTest {
         Assert.assertEquals(PrefixRule.MatchResult(linkedMapOf(), "/10/show"), prefixRule.match("/user/10/show"))
     }
 
-    Test
+    @Test
     fun testWithVariables() {
         val rule = PrefixRule("/user/<name>")
         Assert.assertEquals(

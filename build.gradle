@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '0.12.213'
+    ext.kotlin_version = '0.14.449'
     ext {
         jettyVersion = '9.2.9.v20150224'
     }
@@ -30,8 +30,8 @@ dependencies {
             "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version",
             "org.eclipse.jetty:jetty-server:$jettyVersion",
             "org.eclipse.jetty:jetty-servlet:$jettyVersion",
-            'com.github.jsocle:jsocle-html:0.0.2',
-            'com.github.jsocle:jsocle-form:0.0.4',
+            'com.github.jsocle:jsocle-html:0.0.3',
+            'com.github.jsocle:jsocle-form:0.0.5',
             'commons-codec:commons-codec:1.10'
 }
 

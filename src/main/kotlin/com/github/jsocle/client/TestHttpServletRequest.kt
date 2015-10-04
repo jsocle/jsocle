@@ -137,7 +137,7 @@ public class TestHttpServletRequest(url: String, cookies: List<Cookie>?) : HttpS
             if (key !in map) {
                 map[key] = arrayOf()
             }
-            map[key] = (map[key]!! + arrayOf(value)).toTypedArray()
+            map[key] = (map[key]!! + arrayOf(value))
         }
         return map
     }
