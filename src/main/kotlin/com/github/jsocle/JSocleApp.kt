@@ -1,11 +1,15 @@
 package com.github.jsocle
 
+import com.github.jsocle.html.Node
 import com.github.jsocle.requests.PrefixRule
 import com.github.jsocle.requests.RequestHandler
 import com.github.jsocle.requests.RequestHandlerMatchResult
 import com.github.jsocle.requests.RequestImpl
 import com.github.jsocle.requests.handlers.RequestHandler0
 import com.github.jsocle.requests.handlers.RequestHandler1
+import com.github.jsocle.response.NodeResponse
+import com.github.jsocle.response.Response
+import com.github.jsocle.response.StaticResponse
 import java.util.*
 
 public abstract class JSocleApp {
@@ -81,6 +85,15 @@ public abstract class JSocleApp {
 
         init {
             app.bridge = this
+        }
+    }
+
+    fun makeResponse(res: Any?): Response {
+        return when (res) {
+            null, Unit -> StaticResponse("")
+            is String -> StaticResponse(res)
+            is Node -> NodeResponse(res)
+            else -> throw IllegalArgumentException()
         }
     }
 }

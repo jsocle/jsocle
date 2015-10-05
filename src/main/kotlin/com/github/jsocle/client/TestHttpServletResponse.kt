@@ -1,6 +1,7 @@
 package com.github.jsocle.client
 
 import com.github.jsocle.response.Response
+import com.github.jsocle.response.StaticResponse
 import java.io.ByteArrayOutputStream
 import java.io.PrintWriter
 import java.util.*
@@ -10,8 +11,10 @@ import javax.servlet.http.HttpServletResponse
 
 public class TestHttpServletResponse : HttpServletResponse {
     public val response: Response by lazy(LazyThreadSafetyMode.NONE) {
-        TestClientResponse(_outputStream.toString("UTF-8"))
+        StaticResponse(_outputStream.toString("UTF-8"), headers)
     }
+
+    private val headers = hashMapOf<String, MutableList<String>>()
 
     private val _outputStream = ByteArrayOutputStream()
 
@@ -132,7 +135,16 @@ public class TestHttpServletResponse : HttpServletResponse {
     }
 
     override fun addHeader(name: String?, value: String?) {
-        throw UnsupportedOperationException()
+        if (name == null || value == null) {
+            throw UnsupportedOperationException()
+        }
+        if (name !in headers) {
+            arrayListOf<String>().apply {
+                headers[name] = this
+            }
+        } else {
+            headers[name]!!
+        }.add(value)
     }
 
     override fun getHeaderNames(): MutableCollection<String>? {

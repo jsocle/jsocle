@@ -1,12 +1,12 @@
 package com.github.jsocle
 
 import com.github.jsocle.client.TestClient
-import com.github.jsocle.html.Node
 import com.github.jsocle.requests.Request
 import com.github.jsocle.requests.RequestHandlerMatchResult
 import com.github.jsocle.requests.RequestImpl
 import com.github.jsocle.requests.session.Session
 import com.github.jsocle.requests.session.StringSession
+import com.github.jsocle.response.Response
 import com.github.jsocle.server.JettyServer
 import com.github.jsocle.servlet.JSocleHttpServlet
 import org.eclipse.jetty.servlet.DefaultServlet
@@ -74,17 +74,15 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND)
                 return@requestContext
             }
-            val response = result!!.handler.handle(request)
+            val ret = result!!.handler.handle(request)
+            val response = if (ret !is Response) makeResponse(ret) else ret
             resp.addCookie(Cookie("session", request.session.serialize()));
-            resp.writer.use {
-                when (response) {
-                    is String -> it.print(response)
-                    is Node -> response.render(it)
-                    is Unit -> it.print("")
-                    else -> throw IllegalArgumentException()
-                }
+            response.headers.forEach { entry ->
+                entry.value.forEach { resp.addHeader(entry.key, it) }
             }
-
+            resp.writer.use {
+                response(it)
+            }
         }
     }
 

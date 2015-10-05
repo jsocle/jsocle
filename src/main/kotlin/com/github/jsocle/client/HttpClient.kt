@@ -9,9 +9,9 @@ import java.net.URL
 public class HttpClient(private val port: Int) : Client() {
     var cookies: String? = null
 
-    override fun get(url: String, method: Request.Method): Response {
-        val connection = URL("http://localhost:${port}${url}").openConnection() as HttpURLConnection
-        connection.setRequestMethod(method.toString())
+    operator override fun get(url: String, method: Request.Method): Response {
+        val connection = URL("http://localhost:$port$url").openConnection() as HttpURLConnection
+        connection.requestMethod = method.toString()
         if (cookies != null) {
             connection.setRequestProperty("Cookie", cookies);
         }
@@ -21,8 +21,8 @@ public class HttpClient(private val port: Int) : Client() {
             cookies = cookieField;
         }
 
-        connection.getInputStream().use {
-            return StaticResponse(it.reader().readText())
+        connection.inputStream.use {
+            return StaticResponse(it.reader().readText(), connection.headerFields)
         }
     }
 }
