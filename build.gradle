@@ -12,8 +12,7 @@ buildscript {
 }
 
 apply plugin: 'kotlin'
-apply plugin: "maven"
-
+apply plugin: 'maven'
 group = "com.github.jsocle"
 
 repositories {
