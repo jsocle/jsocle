@@ -90,9 +90,9 @@ public abstract class JSocleApp {
 
     fun makeResponse(res: Any?): Response {
         return when (res) {
-            null, Unit -> StaticResponse("")
-            is String -> StaticResponse(res)
-            is Node -> NodeResponse(res)
+            null, Unit -> StaticResponse("", hashMapOf("Content-Type" to arrayListOf("text/html; charset=utf-8")))
+            is String -> StaticResponse(res, hashMapOf("Content-Type" to arrayListOf("text/html; charset=utf-8")))
+            is Node -> NodeResponse(res).apply { headers.put("Content-Type", arrayListOf("text/html; charset=utf-8")) }
             else -> throw IllegalArgumentException()
         }
     }
