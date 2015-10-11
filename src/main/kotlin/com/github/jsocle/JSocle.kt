@@ -31,9 +31,12 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
     private val servlet = JSocleHttpServlet(this)
     private val rootPath = Paths.get(".").toAbsolutePath()
     private val staticPath = staticPath ?: rootPath.resolve("static")
+    private val hooks = Hooks()
 
     @JvmOverloads
     public fun run(port: Int = 8080, withIn: JSocle.() -> Unit = { server.join() }) {
+        processOnBeforeFirstRequest()
+
         server = JettyServer(port)
         val servletContextHandler = ServletContextHandler()
         servletContextHandler.contextPath = "/"
@@ -69,11 +72,14 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
     }
 
     fun processRequest(req: HttpServletRequest, resp: HttpServletResponse, method: Request.Method) {
+        processOnBeforeFirstRequest()
+
         requestContext(req, method) { request, result ->
             if (request == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND)
                 return@requestContext
             }
+
             val ret = result!!.handler.handle(request)
             val response = if (ret !is Response) makeResponse(ret) else ret
             resp.addCookie(Cookie("session", request.session.serialize()));
@@ -86,6 +92,13 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
         }
     }
 
+    private fun processOnBeforeFirstRequest() {
+        val onBeforeFirstRequest = hooks.onBeforeFirstRequestCallbacks ?: return
+        hooks.onBeforeFirstRequestCallbacks = null
+        onBeforeFirstRequest.forEach { it() }
+        onBeforeFirstRequest()
+    }
+
     public fun buildSession(cookie: String?): Session {
         return StringSession(cookie, config)
     }
@@ -94,5 +107,12 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
         init {
             com.github.jsocle.form.request.parameters = { request.servlet.parameterMap }
         }
+    }
+
+    open fun onBeforeFirstRequest() {
+    }
+
+    fun addOnBeforeFirstRequest(callback: () -> Unit) {
+        hooks.onBeforeFirstRequestCallbacks!!.add(callback)
     }
 }
