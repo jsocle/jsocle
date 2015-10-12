@@ -20,7 +20,7 @@ public class IntegrationTest {
         assertEquals("Hello World!!!", app.getClient().get("/", Request.Method.GET).getData());
         assertEquals("Hello John", app.getClient().get("/John", Request.Method.GET).getData());
         assertEquals("Hello John<br/>Hello John<br/>Hello John<br/>", app.getClient().get("/John/3", Request.Method.GET).getData());
-        assertEquals("Hello John : rCook", app.getClient().get("/John/job/Cook", Request.Method.GET).getData());
+        assertEquals("Hello John : Cook", app.getClient().get("/John/job/Cook", Request.Method.GET).getData());
 
         assertEquals("/faq", app.faq.url());
         assertEquals("GET", app.getClient().get(app.method.url(), Request.Method.GET).getData());
