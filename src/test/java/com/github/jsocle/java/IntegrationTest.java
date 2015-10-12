@@ -4,17 +4,17 @@ import com.github.jsocle.JSocle;
 import com.github.jsocle.request;
 import com.github.jsocle.requests.Request;
 import com.github.jsocle.requests.handlers.RequestHandler0;
+import kotlin.jvm.functions.Function0;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class IntegrationTest {
     public static void main(String[] ar) {
-
-        new App().run(8080);
+        new App().run(5000);
     }
 
-//    @Test
+    @Test
     public void testApp() {
         App app = new App();
         assertEquals("Hello World!!!", app.getClient().get("/", Request.Method.GET).getData());
@@ -28,14 +28,12 @@ public class IntegrationTest {
     }
 
     public static class App extends JSocle {
-
         public final RequestHandler0<String> method = route("/method", () -> request.getMethod().toString());
         public final RequestHandler0<Object> faq = route("/faq", () -> null);
         RequestHandler0<String> index = route("/", () -> "Hello World!!!");
 
         public App() {
-
-            route("/test", () -> index.url());
+            route("/test", (Function0<String>) index::url);
 
             route("/<name>", name -> "Hello " + name);
 
