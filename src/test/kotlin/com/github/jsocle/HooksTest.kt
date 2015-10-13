@@ -28,4 +28,25 @@ class HooksTest {
         Assert.assertTrue(onBeforeFirstRequestCalled)
         Assert.assertTrue(app.onBeforeFirstRequestCalled)
     }
+
+    @Test
+    fun testTeardownRequest() {
+        val app = object : JSocle() {
+            init {
+                route("/") { -> throw RuntimeException() }
+            }
+        }
+
+        var teardownRequestCalled = false
+        app.addTeardownRequest { teardownRequestCalled = true }
+
+        var runtimeExceptionCatched = false
+        try {
+            app.client.get("/")
+        } catch (e: RuntimeException) {
+            runtimeExceptionCatched = true
+        }
+        Assert.assertTrue(runtimeExceptionCatched)
+        Assert.assertTrue(teardownRequestCalled)
+    }
 }

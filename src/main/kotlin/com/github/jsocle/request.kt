@@ -11,18 +11,28 @@ public class request {
         private val r: com.github.jsocle.requests.Request
             get() = local.get() ?: throw UnsupportedOperationException("Not in request context.")
 
-        fun push(request: com.github.jsocle.requests.Request) {
+
+        private fun push(request: com.github.jsocle.requests.Request) {
             if (local.get() != null) {
                 throw UnsupportedOperationException("Request context was already settled.")
             }
             local.set(request)
         }
 
-        fun pop() {
+        private fun pop() {
             if (local.get() == null) {
                 throw UnsupportedOperationException("Request context was not settled.")
             }
             local.remove()
+        }
+
+        operator fun invoke(request: com.github.jsocle.requests.Request, intent: () -> Unit) {
+            push(request)
+            try {
+                intent()
+            } finally {
+                pop()
+            }
         }
 
         @JvmStatic

@@ -56,24 +56,24 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
     }
 
     fun requestContext(req: HttpServletRequest, method: Request.Method, body: (request: RequestImpl?, result: RequestHandlerMatchResult?) -> Unit) {
-        val requestUri = URLDecoder.decode(req.requestURI, "UTF-8")
-        val result = findRequestHandler(requestUri)
-        if (result == null) {
-            body(null, null)
-            return
-        }
-        val request = RequestImpl(requestUri, result.pathVariables, req, method, this)
-        com.github.jsocle.request.push(request)
+        processOnBeforeFirstRequest()
         try {
-            body(request, result)
+            val requestUri = URLDecoder.decode(req.requestURI, "UTF-8")
+            val result = findRequestHandler(requestUri)
+            if (result == null) {
+                body(null, null)
+                return
+            }
+            val request = RequestImpl(requestUri, result.pathVariables, req, method, this)
+            com.github.jsocle.request(request) {
+                body(request, result)
+            }
         } finally {
-            com.github.jsocle.request.pop()
+            hooks.onTeardownRequestCallbacks.forEach { it() }
         }
     }
 
     fun processRequest(req: HttpServletRequest, resp: HttpServletResponse, method: Request.Method) {
-        processOnBeforeFirstRequest()
-
         requestContext(req, method) { request, result ->
             if (request == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND)
@@ -114,5 +114,9 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
 
     fun addOnBeforeFirstRequest(callback: () -> Unit) {
         hooks.onBeforeFirstRequestCallbacks!!.add(callback)
+    }
+
+    fun addTeardownRequest(callback: () -> Unit) {
+        hooks.onTeardownRequestCallbacks.add(callback)
     }
 }
