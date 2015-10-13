@@ -96,7 +96,6 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
         val onBeforeFirstRequest = hooks.onBeforeFirstRequestCallbacks ?: return
         hooks.onBeforeFirstRequestCallbacks = null
         onBeforeFirstRequest.forEach { it() }
-        onBeforeFirstRequest()
     }
 
     public fun buildSession(cookie: String?): Session {
@@ -107,9 +106,6 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
         init {
             com.github.jsocle.form.request.parameters = { request.servlet.parameterMap }
         }
-    }
-
-    open fun onBeforeFirstRequest() {
     }
 
     fun addOnBeforeFirstRequest(callback: () -> Unit) {

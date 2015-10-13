@@ -7,17 +7,10 @@ class HooksTest {
     @Test
     fun testOnBeforeFirstRequest() {
         val app = object : JSocle() {
-            var onBeforeFirstRequestCalled = false
-
             init {
                 route("/") { -> }
             }
-
-            override fun onBeforeFirstRequest() {
-                super.onBeforeFirstRequest()
-                onBeforeFirstRequestCalled = true
-            }
-        }
+       }
 
         var onBeforeFirstRequestCalled = false
         app.addOnBeforeFirstRequest {
@@ -26,7 +19,6 @@ class HooksTest {
 
         app.client.get("/")
         Assert.assertTrue(onBeforeFirstRequestCalled)
-        Assert.assertTrue(app.onBeforeFirstRequestCalled)
     }
 
     @Test
