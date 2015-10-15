@@ -132,7 +132,7 @@ public class TestHttpServletRequest(url: String, cookies: List<Cookie>?) : HttpS
 
     override fun getParameterMap(): MutableMap<String, Array<String>>? {
         val map: MutableMap<String, Array<String>> = hashMapOf()
-        url.getQuery()?.split('&')?.map {
+        url.query?.split('&')?.map {
             val (key, value) = it.split('=').map { URLDecoder.decode(it, "UTF-8") }
             if (key !in map) {
                 map[key] = arrayOf()
@@ -223,7 +223,7 @@ public class TestHttpServletRequest(url: String, cookies: List<Cookie>?) : HttpS
     }
 
     override fun getRequestURI(): String? {
-        return url.getPath()
+        return url.path
     }
 
     override fun getPart(name: String?): Part? {

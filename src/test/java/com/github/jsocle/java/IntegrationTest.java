@@ -4,6 +4,7 @@ import com.github.jsocle.JSocle;
 import com.github.jsocle.request;
 import com.github.jsocle.requests.Request;
 import com.github.jsocle.requests.handlers.RequestHandler0;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -14,13 +15,13 @@ public class IntegrationTest {
         new App().run(8080);
     }
 
-//    @Test
+    @Test
     public void testApp() {
         App app = new App();
         assertEquals("Hello World!!!", app.getClient().get("/", Request.Method.GET).getData());
         assertEquals("Hello John", app.getClient().get("/John", Request.Method.GET).getData());
         assertEquals("Hello John<br/>Hello John<br/>Hello John<br/>", app.getClient().get("/John/3", Request.Method.GET).getData());
-        assertEquals("Hello John : rCook", app.getClient().get("/John/job/Cook", Request.Method.GET).getData());
+        assertEquals("Hello John : Cook", app.getClient().get("/John/job/Cook", Request.Method.GET).getData());
 
         assertEquals("/faq", app.faq.url());
         assertEquals("GET", app.getClient().get(app.method.url(), Request.Method.GET).getData());
@@ -31,6 +32,7 @@ public class IntegrationTest {
 
         public final RequestHandler0<String> method = route("/method", () -> request.getMethod().toString());
         public final RequestHandler0<Object> faq = route("/faq", () -> null);
+        @NotNull
         RequestHandler0<String> index = route("/", () -> "Hello World!!!");
 
         public App() {

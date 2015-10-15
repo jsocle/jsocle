@@ -10,7 +10,7 @@ public class RequestImpl(public override val url: String,
                          public override val method: Request.Method, val app: JSocle) : Request {
 
     public override val session: Session by lazy(LazyThreadSafetyMode.NONE) { ->
-        app.buildSession(servlet.getCookies()?.firstOrNull { it.getName() == "session" }?.getValue())
+        app.buildSession(servlet.cookies?.firstOrNull { it.name == "session" }?.value)
     }
 
     override fun parameter(name: String): String? {
@@ -18,7 +18,7 @@ public class RequestImpl(public override val url: String,
     }
 
     override val parameters: Map<String, List<String>> by lazy(LazyThreadSafetyMode.NONE) {
-        (servlet.getParameterMap() ?: mapOf<String, Array<String>>())
+        (servlet.parameterMap ?: mapOf<String, Array<String>>())
                 .map { it.getKey() to it.getValue().map { it.toString() } }
                 .toMap()
     }
