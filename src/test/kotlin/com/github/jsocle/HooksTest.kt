@@ -30,7 +30,7 @@ class HooksTest {
         }
 
         var teardownRequestCalled = false
-        app.addTeardownRequest { teardownRequestCalled = true }
+        app.addOnTeardownRequest { teardownRequestCalled = true }
 
         var runtimeExceptionCatched = false
         try {

@@ -112,7 +112,7 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
         hooks.onBeforeFirstRequestCallbacks!!.add(callback)
     }
 
-    fun addTeardownRequest(callback: () -> Unit) {
+    fun addOnTeardownRequest(callback: () -> Unit) {
         hooks.onTeardownRequestCallbacks.add(callback)
     }
 }
