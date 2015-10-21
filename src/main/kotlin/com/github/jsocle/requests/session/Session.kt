@@ -1,8 +1,9 @@
 package com.github.jsocle.requests.session
 
 abstract class Session() {
-    operator public abstract fun get(name: String): Any
-    operator public abstract fun set(name: String, value: Any): Any
-    operator public abstract fun contains(name: String): Boolean
-    public abstract fun serialize(): String?
+    operator abstract fun get(name: String): Any
+    operator abstract fun set(name: String, value: Any): Any
+    operator abstract fun contains(name: String): Boolean
+    abstract fun serialize(): String?
+    abstract fun remove(key: String)
 }

@@ -30,13 +30,12 @@ val ByteArray.encodeBase64UrlSafe: String
         return Base64.getUrlEncoder().encodeToString(this)
     }
 
-val List<Byte>.encodeBase64UrlSafe: String
-    get() {
-        return this.toByteArray().encodeBase64UrlSafe
-    }
-
 
 public class StringSession(cookie: String?, val config: JSocleConfig) : Session() {
+    override fun remove(key: String) {
+        map.remove(key)
+    }
+
     private val map = deserialize(cookie) ?: hashMapOf()
 
     private fun deserialize(cookie: String?): MutableMap<String, String>? {

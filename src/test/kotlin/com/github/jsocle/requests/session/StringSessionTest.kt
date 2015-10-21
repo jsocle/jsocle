@@ -22,4 +22,13 @@ public class StringSessionTest {
         val session = StringSession("$modifiedValue.$mac", jScoleConfig)
         Assert.assertFalse(session.contains("name"))
     }
+
+    @Test
+    fun testRemove() {
+        val session = StringSession(null, JSocleConfig("key".toByteArray()))
+        session["key"] = "value"
+        Assert.assertTrue("key" in session)
+        session.remove("key")
+        Assert.assertTrue("key" !in session)
+    }
 }
