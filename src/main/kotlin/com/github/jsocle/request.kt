@@ -52,6 +52,8 @@ public class request {
         override val handler: RequestHandler<*> get() = r.handler
         @JvmStatic
         override val handlerCallStack: Array<JSocleApp> get() = r.handlerCallStack
+        @JvmStatic
+        override val g: Request.RequestGlobal get() = r.g
 
         @JvmStatic
         override fun parameter(name: String): String? = r.parameter(name)

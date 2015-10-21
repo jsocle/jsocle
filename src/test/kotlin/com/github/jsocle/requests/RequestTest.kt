@@ -2,6 +2,7 @@ package com.github.jsocle.requests
 
 import com.github.jsocle.Blueprint
 import com.github.jsocle.JSocle
+import com.github.jsocle.JSocleApp
 import com.github.jsocle.request
 import org.junit.Assert
 import org.junit.Test
@@ -9,6 +10,12 @@ import org.junit.Test
 public class RequestTest {
     private object childApp : Blueprint() {
         val index = route("/") { -> }
+
+        override fun onBeforeRequest(): Any? {
+            @Suppress("UNCHECKED_CAST")
+            (request.g.getOrSet("callStack", { arrayListOf<JSocleApp>() }) as MutableList<JSocleApp>).add(this)
+            return null
+        }
     }
 
     private object app : JSocle() {
@@ -16,6 +23,12 @@ public class RequestTest {
 
         init {
             register(childApp, urlPrefix = "/child")
+        }
+
+        override fun onBeforeRequest(): Any? {
+            @Suppress("UNCHECKED_CAST")
+            (request.g.getOrSet("callStack", { arrayListOf<JSocleApp>() }) as MutableList<JSocleApp>).add(this)
+            return null
         }
     }
 
@@ -57,6 +70,13 @@ public class RequestTest {
         app.client.get(childApp.index.url()) {
             Assert.assertEquals(childApp.index, request.handler)
             Assert.assertArrayEquals(arrayOf(app, childApp), request.handlerCallStack)
+        }
+    }
+
+    @Test
+    fun testGlobal() {
+        app.client.get(childApp.index.url()) {
+            Assert.assertEquals(listOf(app, childApp), request.g["callStack"])
         }
     }
 }
