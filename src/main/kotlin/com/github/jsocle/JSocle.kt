@@ -55,18 +55,25 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
         }
     }
 
-    fun requestContext(req: HttpServletRequest, method: Request.Method, body: (request: RequestImpl?, result: RequestHandlerMatchResult?) -> Unit) {
+    fun requestContext(req: HttpServletRequest, method: Request.Method, body: (request: RequestImpl?, result: RequestHandlerMatchResult?, hookResponse: Any?) -> Unit) {
         processOnBeforeFirstRequest()
         try {
             val requestUri = URLDecoder.decode(req.requestURI, "UTF-8")
             val result = findRequestHandler(requestUri)
             if (result == null) {
-                body(null, null)
+                body(null, null, null)
                 return
             }
-            val request = RequestImpl(requestUri, result.pathVariables, req, method, this)
+            val request = RequestImpl(requestUri, result.pathVariables, req, method, result.handler, result.handlerStack, this)
             com.github.jsocle.request(request) {
-                body(request, result)
+                var response: Any? = null
+                for (it in result.handlerStack) {
+                    response = it.onBeforeRequest()
+                    if (response != null && response !is Unit) {
+                        break
+                    }
+                }
+                body(request, result, response)
             }
         } finally {
             hooks.onTeardownRequestCallbacks.forEach { it() }
@@ -74,14 +81,15 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
     }
 
     fun processRequest(req: HttpServletRequest, resp: HttpServletResponse, method: Request.Method) {
-        requestContext(req, method) { request, result ->
+        requestContext(req, method) { request, result, hookResponse ->
             if (request == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND)
                 return@requestContext
             }
 
-            val ret = result!!.handler.handle(request)
-            val response = if (ret !is Response) makeResponse(ret) else ret
+            @Suppress("IMPLICIT_CAST_TO_UNIT_OR_ANY")
+            val handlerResponse = if (hookResponse != null && hookResponse !is Unit) hookResponse else result!!.handler.handle(request)
+            val response = if (handlerResponse !is Response) makeResponse(handlerResponse) else handlerResponse
             resp.status = response.statusCode
             resp.addCookie(Cookie("session", request.session.serialize()));
             response.headers.forEach { entry ->

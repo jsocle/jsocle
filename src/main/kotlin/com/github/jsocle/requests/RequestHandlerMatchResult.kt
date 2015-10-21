@@ -1,3 +1,6 @@
 package com.github.jsocle.requests
 
-public data class RequestHandlerMatchResult(public val handler: RequestHandler<*>, public val pathVariables: Map<String, Any>)
+import com.github.jsocle.JSocleApp
+
+data class RequestHandlerMatchResult(val handler: RequestHandler<*>, val pathVariables: Map<String, Any>,
+                                     val handlerStack: Array<JSocleApp>)

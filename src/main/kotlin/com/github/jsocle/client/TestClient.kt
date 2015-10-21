@@ -20,7 +20,7 @@ class TestClient(private val app: JSocle) : Client() {
     }
 
     operator fun get(url: String, method: Request.Method = Request.Method.GET, intent: () -> Unit) {
-        app.requestContext(TestHttpServletRequest(url, cookies), method) { request, match ->
+        app.requestContext(TestHttpServletRequest(url, cookies), method) { request, match, hookResponse ->
             intent()
         }
     }

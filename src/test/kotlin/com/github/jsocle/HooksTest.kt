@@ -10,7 +10,7 @@ class HooksTest {
             init {
                 route("/") { -> }
             }
-       }
+        }
 
         var onBeforeFirstRequestCalled = false
         app.addOnBeforeFirstRequest {
@@ -40,5 +40,63 @@ class HooksTest {
         }
         Assert.assertTrue(runtimeExceptionCatched)
         Assert.assertTrue(teardownRequestCalled)
+    }
+
+    @Test
+    fun testOnBeforeRequest() {
+        var onBeforeCallStack: MutableList<JSocleApp>
+
+        val childApp = object : Blueprint() {
+            val index = route("/") { -> }
+            val forbidden = route("/forbidden") { -> }
+
+            override fun onBeforeRequest(): Any? {
+                onBeforeCallStack.add(this)
+                return super.onBeforeRequest()
+            }
+        }
+
+        val app = object : JSocle() {
+            val index = route("/") { -> }
+
+            init {
+                register(childApp, urlPrefix = "/childApp")
+            }
+
+            override fun onBeforeRequest(): Any? {
+                onBeforeCallStack.add(this)
+                if (request.handlerCallStack.last() == childApp) {
+                    if (request.handler == childApp.forbidden) {
+                        return "forbidden"
+                    }
+                }
+                return null
+            }
+        }
+
+        onBeforeCallStack = arrayListOf()
+        app.client.get(app.index.url())
+        Assert.assertEquals(listOf(app), onBeforeCallStack)
+
+        onBeforeCallStack = arrayListOf()
+        app.client.get(childApp.index.url())
+        Assert.assertEquals(listOf(app, childApp), onBeforeCallStack)
+
+        onBeforeCallStack = arrayListOf()
+        app.client.get(childApp.forbidden.url())
+        Assert.assertEquals(listOf(app), onBeforeCallStack)
+    }
+
+    @Test
+    fun testOnBeforeRequestEarlyReturn() {
+        val app = object : JSocle() {
+            val index = route("/") { -> "index" }
+
+            override fun onBeforeRequest(): Any? {
+                return "onBeforeRequest"
+            }
+        }
+
+        Assert.assertEquals("onBeforeRequest", app.client.get(app.index.url()).data)
     }
 }

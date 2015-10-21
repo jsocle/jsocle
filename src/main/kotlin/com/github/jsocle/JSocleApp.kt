@@ -58,28 +58,26 @@ public abstract class JSocleApp {
         for (requestHandler in requestHandlers) {
             val pathVariables = requestHandler.rule.match(uri)
             if (pathVariables != null) {
-                return RequestHandlerMatchResult(requestHandler, pathVariables)
+                return RequestHandlerMatchResult(requestHandler, pathVariables, arrayOf(this))
             }
         }
         for (child in children) {
             val matchResult = findChildRequestHandler(child, uri)
             if (matchResult != null) {
-                return matchResult
+                return matchResult.copy(handlerStack = arrayOf(this) + matchResult.handlerStack)
             }
         }
         return null
     }
 
-    protected fun findChildRequestHandler(child: Bridge, uri: String): RequestHandlerMatchResult? {
+    private fun findChildRequestHandler(child: Bridge, uri: String): RequestHandlerMatchResult? {
         val rule = child.rule
         if (rule != null) {
             val result = rule.match(uri) ?: return null
 
             val handlerResult = child.app.findRequestHandler(result.uri)
             if (handlerResult != null) {
-                return RequestHandlerMatchResult(
-                        handlerResult.handler, result.pathVariables + handlerResult.pathVariables
-                );
+                return handlerResult.copy(pathVariables = result.pathVariables + handlerResult.pathVariables)
             }
             return null;
         }
@@ -101,5 +99,9 @@ public abstract class JSocleApp {
             is Node -> NodeResponse(res).apply { headers.put("Content-Type", arrayListOf("text/html; charset=utf-8")) }
             else -> throw IllegalArgumentException()
         }
+    }
+
+    open fun onBeforeRequest(): Any? {
+        return Unit
     }
 }

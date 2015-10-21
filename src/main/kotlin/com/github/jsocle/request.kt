@@ -1,6 +1,7 @@
 package com.github.jsocle
 
 import com.github.jsocle.requests.Request
+import com.github.jsocle.requests.RequestHandler
 import com.github.jsocle.requests.session.Session
 import javax.servlet.http.HttpServletRequest
 
@@ -47,6 +48,10 @@ public class request {
         public override val session: Session get() = r.session
         @JvmStatic
         override val servlet: HttpServletRequest get() = r.servlet
+        @JvmStatic
+        override val handler: RequestHandler<*> get() = r.handler
+        @JvmStatic
+        override val handlerCallStack: Array<JSocleApp> get() = r.handlerCallStack
 
         @JvmStatic
         override fun parameter(name: String): String? = r.parameter(name)
