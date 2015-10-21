@@ -114,6 +114,7 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
     companion object {
         init {
             com.github.jsocle.form.request.parameters = { request.servlet.parameterMap }
+            com.github.jsocle.form.request.method = { request.method.name() }
         }
     }
 
