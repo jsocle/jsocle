@@ -12,13 +12,17 @@ public class TestClientTest {
         val set = route("/set") { -> request.session["store"] = request.parameter("store")!! }
     }
 
+    object redirectApp : Blueprint() {
+        val from = route("/from") { -> redirect(to.url()) }
+        val to = route("/to") { -> "redirected" }
+    }
+
     object app : JSocle() {
         init {
             config.secretKey = "secret".toByteArray()
-            route("/") { ->
-                return@route "index"
-            }
+            route("/") { -> "index" }
             register(sessionApp, "/session")
+            register(redirectApp, "/redirect")
         }
     }
 
@@ -32,5 +36,17 @@ public class TestClientTest {
         val client = app.client
         client.get(sessionApp.set.url("store" to "a value"))
         Assert.assertEquals("a value", client.get(sessionApp.get.url()).data)
+    }
+
+    @Test
+    fun testUrl() {
+        Assert.assertEquals("/", app.client.get("/").url)
+    }
+
+    @Test
+    fun testRedirect() {
+        val res = app.client.get(redirectApp.from.url())
+        Assert.assertEquals(redirectApp.to.url(), res.url)
+        Assert.assertEquals("redirected", res.data)
     }
 }

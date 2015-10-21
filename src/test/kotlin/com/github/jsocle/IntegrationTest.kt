@@ -76,6 +76,11 @@ public class IntegrationTest {
         }
     }
 
+    object redirectApp : Blueprint() {
+        val from = route("/from") { -> redirect(to.url()) }
+        val to = route("/to") { -> "redirected" }
+    }
+
     object app : JSocle() {
         val method = route("/method") { ->
             return@route request.method.toString()
@@ -101,6 +106,7 @@ public class IntegrationTest {
             register(profileApp, urlPrefix = "/profile/<userId:Int>")
             register(postApp, urlPrefix = "/post")
             register(sessionApp, urlPrefix = "/session")
+            register(redirectApp, urlPrefix = "/redirect")
         }
     }
 
@@ -142,6 +148,15 @@ public class IntegrationTest {
             Assert.assertEquals(
                     """<input maxlength="100" name="title" type="text">""", client.get(postApp.edit.url(1)).data
             )
+        }
+    }
+
+    @Test
+    fun testRedirect() {
+        app.run {
+            val res = app.server.client.get(redirectApp.from.url())
+            Assert.assertEquals(redirectApp.to.url(), res.url)
+            Assert.assertEquals("redirected", res.data)
         }
     }
 }

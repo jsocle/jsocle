@@ -11,6 +11,7 @@ import com.github.jsocle.response.NodeResponse
 import com.github.jsocle.response.Response
 import com.github.jsocle.response.StaticResponse
 import java.util.*
+import javax.servlet.http.HttpServletResponse
 
 public abstract class JSocleApp {
     protected val requestHandlers: ArrayList<RequestHandler<*>> = arrayListOf()
@@ -47,6 +48,11 @@ public abstract class JSocleApp {
         return app
     }
 
+    fun redirect(url: String): Response {
+        return StaticResponse(
+                data = "", headers = hashMapOf("Location" to arrayListOf(url)), statusCode = HttpServletResponse.SC_FOUND
+        )
+    }
 
     public fun findRequestHandler(uri: String): RequestHandlerMatchResult? {
         for (requestHandler in requestHandlers) {

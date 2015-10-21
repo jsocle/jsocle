@@ -82,6 +82,7 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
 
             val ret = result!!.handler.handle(request)
             val response = if (ret !is Response) makeResponse(ret) else ret
+            resp.status = response.statusCode
             resp.addCookie(Cookie("session", request.session.serialize()));
             response.headers.forEach { entry ->
                 entry.value.forEach { resp.addHeader(entry.key, it) }

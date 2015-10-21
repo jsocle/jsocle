@@ -1,7 +1,5 @@
 package com.github.jsocle.client
 
-import com.github.jsocle.response.Response
-import com.github.jsocle.response.StaticResponse
 import java.io.ByteArrayOutputStream
 import java.io.PrintWriter
 import java.util.*
@@ -10,17 +8,15 @@ import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
 
 public class TestHttpServletResponse : HttpServletResponse {
-    public val response: Response by lazy(LazyThreadSafetyMode.NONE) {
-        StaticResponse(_outputStream.toString("UTF-8"), headers)
-    }
-
     private val headers = hashMapOf<String, MutableList<String>>()
 
     private val _outputStream = ByteArrayOutputStream()
 
     private val _printWriter = PrintWriter(_outputStream)
 
-    public val cookies: ArrayList<Cookie> = arrayListOf()
+    val cookies: ArrayList<Cookie> = arrayListOf()
+
+    private var _status: Int = 0
 
     override fun setContentLengthLong(len: Long) {
         throw UnsupportedOperationException()
@@ -98,9 +94,7 @@ public class TestHttpServletResponse : HttpServletResponse {
         throw UnsupportedOperationException()
     }
 
-    override fun getStatus(): Int {
-        throw UnsupportedOperationException()
-    }
+    override fun getStatus(): Int = _status
 
     override fun getHeader(name: String?): String? {
         throw UnsupportedOperationException()
@@ -111,7 +105,7 @@ public class TestHttpServletResponse : HttpServletResponse {
     }
 
     override fun setStatus(sc: Int) {
-        throw UnsupportedOperationException()
+        _status = sc
     }
 
     override fun setStatus(sc: Int, sm: String?) {
@@ -179,5 +173,9 @@ public class TestHttpServletResponse : HttpServletResponse {
 
     override fun sendRedirect(location: String?) {
         throw UnsupportedOperationException()
+    }
+
+    internal fun buildResponse(url: String): ClientResponse {
+        return ClientResponse(_outputStream.toString("UTF-8"), headers, url, _status)
     }
 }
