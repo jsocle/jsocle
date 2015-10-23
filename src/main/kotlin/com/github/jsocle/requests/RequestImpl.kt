@@ -21,7 +21,7 @@ public class RequestImpl(override val url: String, override val pathVariables: M
 
     override val parameters: Map<String, List<String>> by lazy(LazyThreadSafetyMode.NONE) {
         (servlet.parameterMap ?: mapOf<String, Array<String>>())
-                .map { it.getKey() to it.getValue().map { it.toString() } }
+                .map { it.key to it.value.map { it.toString() } }
                 .toMap()
     }
 }

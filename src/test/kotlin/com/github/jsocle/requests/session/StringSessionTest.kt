@@ -18,7 +18,7 @@ public class StringSessionTest {
         sessionForSerialize["name"] = "John"
         val serialized = sessionForSerialize.serialize()!!
         val (value, mac) = serialized.split('.')
-        val modifiedValue = (value.decodeBase64UrlSafe + "modify".toByteArray().asList()).encodeBase64UrlSafe
+        val modifiedValue = (value.decodeBase64UrlSafe + "modify".toByteArray()).encodeBase64UrlSafe
         val session = StringSession("$modifiedValue.$mac", jScoleConfig)
         Assert.assertFalse(session.contains("name"))
     }

@@ -42,11 +42,11 @@ public class StringSession(cookie: String?, val config: JSocleConfig) : Session(
         val bytes = decode(cookie) ?: return null
         ByteArrayInputStream(bytes).use {
             InflaterInputStream(it).use {
-                it.reader()use {
+                it.reader().use {
                     return it.readText()
                             .split('&')
                             .map { it.split('=', limit = 2) }
-                            .filter { it.size() == 2 }
+                            .filter { it.size == 2 }
                             .map {
                                 val (key, value) = it.map { it.decodeURL }
                                 key to value
@@ -59,7 +59,7 @@ public class StringSession(cookie: String?, val config: JSocleConfig) : Session(
 
     private fun decode(cookie: String?): ByteArray? {
         val pair = cookie?.split('.', limit = 2)
-        if (pair?.size() ?: 0 != 2) {
+        if (pair?.size ?: 0 != 2) {
             return null
         }
         val (base64EncodedValue, mac) = pair

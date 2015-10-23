@@ -37,12 +37,12 @@ abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String)
 
     private fun buildQueryString(params: Map<String, Any>): String {
         val queryParams = params.filter { it.key !in absolutePathVariables }
-        if (queryParams.size() == 0) {
+        if (queryParams.size == 0) {
             return ""
         }
         val queryString = queryParams.map {
             URLEncoder.encode(it.key, "UTF-8") + "=" + URLEncoder.encode(it.value.toString(), "UTF-8")
-        }.join("&")
+        }.joinToString("&")
         return "?" + queryString
     }
 
