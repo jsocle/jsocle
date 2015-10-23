@@ -2,6 +2,7 @@ package com.github.jsocle
 
 import com.github.jsocle.form.Form
 import com.github.jsocle.form.fields.StringField
+import com.github.jsocle.form.validators
 import com.github.jsocle.form.validators.Required
 import com.github.jsocle.html.elements.Ul
 import com.github.jsocle.requests.Request
@@ -47,7 +48,7 @@ public class IntegrationTest {
 
         val edit = route("/<id:Int>/edit") { id: Int ->
             val form = object : Form() {
-                val title by StringField(validators = arrayOf(Required()))
+                val title by StringField().apply { validators.add(Required()) }
             }
             if (form.validateOnPost()) {
                 form.title.render { maxlength = "100" }

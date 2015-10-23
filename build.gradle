@@ -30,7 +30,7 @@ dependencies {
             "org.eclipse.jetty:jetty-server:$jettyVersion",
             "org.eclipse.jetty:jetty-servlet:$jettyVersion",
             'com.github.jsocle:jsocle-html:0.0.4',
-            'com.github.jsocle:jsocle-form:0.0.8',
+            'com.github.jsocle:jsocle-form:0.0.9',
             'commons-codec:commons-codec:1.10'
 }
 
