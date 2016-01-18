@@ -4,6 +4,10 @@ import com.github.jsocle.JSocle
 import com.github.jsocle.JSocleApp
 import com.github.jsocle.requests.session.Session
 import javax.servlet.http.HttpServletRequest
+import kotlin.collections.firstOrNull
+import kotlin.collections.map
+import kotlin.collections.mapOf
+import kotlin.collections.toMap
 
 public class RequestImpl(override val url: String, override val pathVariables: Map<String, Any>,
                          override val servlet: HttpServletRequest, override val method: Request.Method,

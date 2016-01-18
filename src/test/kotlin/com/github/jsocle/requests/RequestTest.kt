@@ -6,6 +6,9 @@ import com.github.jsocle.JSocleApp
 import com.github.jsocle.request
 import org.junit.Assert
 import org.junit.Test
+import kotlin.collections.arrayListOf
+import kotlin.collections.listOf
+import kotlin.collections.mapOf
 
 public class RequestTest {
     private object childApp : Blueprint() {

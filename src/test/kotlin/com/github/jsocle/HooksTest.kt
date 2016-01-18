@@ -2,6 +2,9 @@ package com.github.jsocle
 
 import org.junit.Assert
 import org.junit.Test
+import kotlin.collections.arrayListOf
+import kotlin.collections.last
+import kotlin.collections.listOf
 
 class HooksTest {
     @Test

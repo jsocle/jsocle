@@ -4,6 +4,7 @@ import com.github.jsocle.JSocle
 import com.github.jsocle.html.elements.H1
 import org.junit.Assert
 import org.junit.Test
+import kotlin.collections.arrayListOf
 
 class ResponseContentTypeTest {
     @Test

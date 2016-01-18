@@ -1,6 +1,8 @@
 package com.github.jsocle.requests
 
 import java.util.regex.Pattern
+import kotlin.collections.mapIndexed
+import kotlin.collections.toMap
 
 public class RouteRule(rule: String) : Rule(rule) {
     private val pattern: Pattern by lazy(LazyThreadSafetyMode.NONE) {

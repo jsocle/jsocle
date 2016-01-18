@@ -5,6 +5,7 @@ import com.github.jsocle.JSocle
 import com.github.jsocle.request
 import org.junit.Assert
 import org.junit.Test
+import kotlin.text.toByteArray
 
 public class TestClientTest {
     object sessionApp : Blueprint() {

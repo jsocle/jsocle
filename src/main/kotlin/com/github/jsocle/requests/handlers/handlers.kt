@@ -3,6 +3,7 @@ package com.github.jsocle.requests.handlers
 import com.github.jsocle.JSocleApp
 import com.github.jsocle.requests.RequestHandler
 import com.github.jsocle.requests.RequestImpl
+import kotlin.collections.mapOf
 
 public class RequestHandler0<R>(app: JSocleApp, rule: String, private val handler: () -> R) : RequestHandler<R>(app, rule) {
     override fun handle(request: RequestImpl): R {

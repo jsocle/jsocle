@@ -2,6 +2,7 @@ package com.github.jsocle.requests
 
 import org.junit.Assert
 import org.junit.Test
+import kotlin.collections.linkedMapOf
 
 public class PrefixRuleTest {
     @Test

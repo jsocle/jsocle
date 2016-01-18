@@ -2,6 +2,7 @@ package com.github.jsocle.response
 
 import java.io.PrintWriter
 import javax.servlet.http.HttpServletResponse
+import kotlin.collections.hashMapOf
 
 abstract class Response(var statusCode: Int = HttpServletResponse.SC_OK) {
     abstract val data: String

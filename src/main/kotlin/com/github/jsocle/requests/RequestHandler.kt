@@ -3,6 +3,9 @@ package com.github.jsocle.requests
 import com.github.jsocle.Blueprint
 import com.github.jsocle.JSocleApp
 import java.net.URLEncoder
+import kotlin.collections.*
+import kotlin.text.replace
+import kotlin.text.toRegex
 
 abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String) {
     public val rule: RouteRule = RouteRule(rule)

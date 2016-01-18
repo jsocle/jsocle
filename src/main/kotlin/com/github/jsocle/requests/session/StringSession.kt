@@ -9,6 +9,8 @@ import java.net.URLEncoder
 import java.util.*
 import java.util.zip.DeflaterOutputStream
 import java.util.zip.InflaterInputStream
+import kotlin.collections.*
+import kotlin.text.split
 
 val String.urlEncoded: String
     get() {

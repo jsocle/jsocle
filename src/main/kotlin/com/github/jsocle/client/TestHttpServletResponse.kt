@@ -6,6 +6,10 @@ import java.util.*
 import javax.servlet.ServletOutputStream
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
+import kotlin.collections.arrayListOf
+import kotlin.collections.contains
+import kotlin.collections.hashMapOf
+import kotlin.collections.set
 
 public class TestHttpServletResponse : HttpServletResponse {
     private val headers = hashMapOf<String, MutableList<String>>()

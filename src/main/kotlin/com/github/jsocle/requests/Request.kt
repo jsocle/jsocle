@@ -4,6 +4,8 @@ import com.github.jsocle.JSocleApp
 import com.github.jsocle.requests.session.Session
 import java.util.*
 import javax.servlet.http.HttpServletRequest
+import kotlin.collections.contains
+import kotlin.collections.set
 
 interface Request {
     val pathVariables: Map<String, Any>

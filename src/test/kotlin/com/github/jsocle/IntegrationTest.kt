@@ -8,6 +8,12 @@ import com.github.jsocle.html.elements.Ul
 import com.github.jsocle.requests.Request
 import org.junit.Assert
 import org.junit.Test
+import kotlin.collections.first
+import kotlin.collections.forEach
+import kotlin.collections.listOf
+import kotlin.collections.mapIndexed
+import kotlin.text.toByteArray
+import kotlin.text.toInt
 
 public class IntegrationTest {
     object faqApp : Blueprint() {

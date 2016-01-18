@@ -1,5 +1,7 @@
 package com.github.jsocle
 
+import kotlin.collections.isEmpty
+
 open class JSocleConfig(secretKey: ByteArray = byteArrayOf()) {
     var secretKey: ByteArray = secretKey
         get() {

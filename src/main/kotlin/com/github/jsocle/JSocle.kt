@@ -18,6 +18,7 @@ import java.nio.file.Paths
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import kotlin.collections.forEach
 import kotlin.properties.Delegates
 
 public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null) : JSocleApp() {

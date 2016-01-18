@@ -8,6 +8,9 @@ import java.util.Enumeration
 import java.util.Locale
 import javax.servlet.*
 import javax.servlet.http.*
+import kotlin.collections.*
+import kotlin.text.split
+import kotlin.text.startsWith
 
 public class TestHttpServletRequest(url: String, cookies: List<Cookie>?) : HttpServletRequest {
     private val url: URL

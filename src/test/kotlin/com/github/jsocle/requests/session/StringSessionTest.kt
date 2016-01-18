@@ -3,6 +3,11 @@ package com.github.jsocle.requests.session
 import com.github.jsocle.JSocleConfig
 import org.junit.Assert
 import org.junit.Test
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.plus
+import kotlin.text.split
+import kotlin.text.toByteArray
 
 public class StringSessionTest {
     @Test(expected = UnsupportedOperationException::class)

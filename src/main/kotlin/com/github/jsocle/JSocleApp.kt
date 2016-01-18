@@ -12,6 +12,9 @@ import com.github.jsocle.response.Response
 import com.github.jsocle.response.StaticResponse
 import java.util.*
 import javax.servlet.http.HttpServletResponse
+import kotlin.collections.arrayListOf
+import kotlin.collections.hashMapOf
+import kotlin.collections.plus
 
 public abstract class JSocleApp {
     protected val requestHandlers: ArrayList<RequestHandler<*>> = arrayListOf()

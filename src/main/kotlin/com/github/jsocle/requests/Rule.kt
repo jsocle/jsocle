@@ -1,6 +1,8 @@
 package com.github.jsocle.requests
 
 import java.util.regex.Pattern
+import kotlin.collections.*
+import kotlin.text.*
 
 private val VARIABLE_MAP = mapOf("String" to "([^/]+)", "Int" to "([0-9]|[1-9][0-9]+)")
 private val variablePattenString = "<([^>]+)>"

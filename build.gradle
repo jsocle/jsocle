@@ -1,8 +1,7 @@
 buildscript {
-    ext.kotlin_version = '1.0.0-beta-1038'
-    ext {
-        jettyVersion = '9.2.9.v20150224'
-    }
+    ext.kotlin_version = '1.0.0-beta-4584'
+    ext.jettyVersion = '9.3.7.v20160115'
+
     repositories {
         mavenCentral()
     }
@@ -29,8 +28,8 @@ dependencies {
             "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version",
             "org.eclipse.jetty:jetty-server:$jettyVersion",
             "org.eclipse.jetty:jetty-servlet:$jettyVersion",
-            'com.github.jsocle:jsocle-html:0.0.4',
-            'com.github.jsocle:jsocle-form:0.0.11',
+            'com.github.jsocle:jsocle-html:8db2b914d3',
+            'com.github.jsocle:jsocle-form:db05992e3a',
             'commons-codec:commons-codec:1.10'
 }
 

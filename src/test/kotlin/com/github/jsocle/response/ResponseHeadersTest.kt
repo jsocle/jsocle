@@ -3,6 +3,8 @@ package com.github.jsocle.response
 import com.github.jsocle.JSocle
 import org.junit.Assert
 import org.junit.Test
+import kotlin.collections.arrayListOf
+import kotlin.collections.set
 
 class ResponseHeadersTest {
     val app = object : JSocle() {

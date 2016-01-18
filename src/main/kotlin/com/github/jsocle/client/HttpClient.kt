@@ -7,7 +7,7 @@ import java.net.URL
 public class HttpClient(private val port: Int) : Client() {
     var cookies: String? = null
 
-    operator override fun get(url: String, method: Request.Method): ClientResponse {
+    override fun get(url: String, method: Request.Method): ClientResponse {
         val connection = URL("http://localhost:$port$url").openConnection() as HttpURLConnection
         connection.requestMethod = method.toString()
         if (cookies != null) {
