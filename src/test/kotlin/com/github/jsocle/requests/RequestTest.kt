@@ -9,6 +9,7 @@ import org.junit.Test
 import kotlin.collections.arrayListOf
 import kotlin.collections.listOf
 import kotlin.collections.mapOf
+import kotlin.text.toInt
 
 public class RequestTest {
     private object childApp : Blueprint() {
@@ -80,6 +81,33 @@ public class RequestTest {
     fun testGlobal() {
         app.client.get(childApp.index.url()) {
             Assert.assertEquals(listOf(app, childApp), request.g["callStack"])
+        }
+    }
+
+    @Test
+    fun testGlobalDelegate() {
+        val g = object {
+            var count by request.g { (request.parameter("count") ?: "0").toInt() }
+            var size: Int? by request.g()
+        }
+
+        app.client.get(childApp.index.url()) {
+            Assert.assertEquals(0, g.count)
+        }
+
+        app.client.get(childApp.index.url("count" to 1)) {
+            Assert.assertEquals(1, g.count)
+        }
+
+        app.client.get(childApp.index.url()) {
+            g.count = 10
+            Assert.assertEquals(10, g.count)
+        }
+
+        app.client.get(childApp.index.url()) {
+            Assert.assertNull(g.size)
+            g.size = 0
+            Assert.assertEquals(0, g.size)
         }
     }
 }

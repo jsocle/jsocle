@@ -4,6 +4,9 @@ import com.github.jsocle.requests.Request
 import com.github.jsocle.requests.RequestHandler
 import com.github.jsocle.requests.session.Session
 import javax.servlet.http.HttpServletRequest
+import kotlin.collections.set
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 public class request {
     companion object request : com.github.jsocle.requests.Request {
@@ -54,6 +57,32 @@ public class request {
         override val handlerCallStack: Array<JSocleApp> get() = r.handlerCallStack
         @JvmStatic
         override val g: Request.RequestGlobal get() = r.g
+
+        fun <T> g(): ReadWriteProperty<Any, T> {
+            return object : ReadWriteProperty<Any, T> {
+                override fun getValue(thisRef: Any, property: KProperty<*>): T {
+                    @Suppress("UNCHECKED_CAST")
+                    return g[property.name] as T
+                }
+
+                override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
+                    g[property.name] = value
+                }
+            }
+        }
+
+        fun <T> g(default: () -> T): ReadWriteProperty<Any, T> {
+            return object : ReadWriteProperty<Any, T> {
+                override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
+                    g[property.name] = value
+                }
+
+                @Suppress("UNCHECKED_CAST")
+                override fun getValue(thisRef: Any, property: KProperty<*>): T {
+                    return g.getOrSet(property.name, default) as T
+                }
+            }
+        }
 
         @JvmStatic
         override fun parameter(name: String): String? = r.parameter(name)
