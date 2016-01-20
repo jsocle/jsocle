@@ -3,6 +3,7 @@ package com.github.jsocle.requests
 import com.github.jsocle.JSocle
 import com.github.jsocle.JSocleApp
 import com.github.jsocle.requests.session.Session
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import kotlin.collections.firstOrNull
 import kotlin.collections.map
@@ -13,6 +14,9 @@ public class RequestImpl(override val url: String, override val pathVariables: M
                          override val servlet: HttpServletRequest, override val method: Request.Method,
                          override val handler: RequestHandler<*>, override val handlerCallStack: Array<JSocleApp>,
                          app: JSocle) : Request {
+    override val cookies: Array<Cookie>
+        get() = servlet.cookies ?: arrayOf()
+
     override val g = Request.RequestGlobal()
 
     public override val session: Session by lazy(LazyThreadSafetyMode.NONE) { ->

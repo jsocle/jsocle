@@ -88,6 +88,12 @@ public class IntegrationTest {
         }
     }
 
+    object sessionApp2: Blueprint() {
+        val index = route("/") { ->
+            if ("counter" in request.session) request.session["counter"] else "0"
+        }
+    }
+
     object redirectApp : Blueprint() {
         val from = route("/from") { -> redirect(to.url()) }
         val to = route("/to") { -> "redirected" }
@@ -118,6 +124,7 @@ public class IntegrationTest {
             register(profileApp, urlPrefix = "/profile/<userId:Int>")
             register(postApp, urlPrefix = "/post")
             register(sessionApp, urlPrefix = "/session")
+            register(sessionApp2, urlPrefix = "/session2")
             register(redirectApp, urlPrefix = "/redirect")
         }
     }
@@ -150,6 +157,8 @@ public class IntegrationTest {
             Assert.assertEquals("2", client.get(sessionApp.index.url()).data)
 
             Assert.assertEquals("100", client.get(sessionApp.index.url("counter" to 99)).data)
+
+            Assert.assertEquals("100", client.get(sessionApp2.index.url()).data)
         }
     }
 

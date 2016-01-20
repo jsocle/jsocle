@@ -3,11 +3,15 @@ package com.github.jsocle.requests
 import com.github.jsocle.JSocleApp
 import com.github.jsocle.requests.session.Session
 import java.util.*
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import kotlin.collections.contains
+import kotlin.collections.first
+import kotlin.collections.firstOrNull
 import kotlin.collections.set
 
 interface Request {
+    val cookies: Array<Cookie>
     val pathVariables: Map<String, Any>
     val url: String
     val parameters: Map<String, List<String>>
@@ -33,3 +37,5 @@ interface Request {
         }
     }
 }
+
+operator fun Array<Cookie>.get(name: String): Cookie? = firstOrNull { it.name == name }

@@ -3,6 +3,7 @@ package com.github.jsocle
 import com.github.jsocle.requests.Request
 import com.github.jsocle.requests.RequestHandler
 import com.github.jsocle.requests.session.Session
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import kotlin.collections.set
 import kotlin.properties.ReadWriteProperty
@@ -10,6 +11,9 @@ import kotlin.reflect.KProperty
 
 public class request {
     companion object request : com.github.jsocle.requests.Request {
+        override val cookies: Array<Cookie>
+            get() = r.cookies
+
         private val local = ThreadLocal<com.github.jsocle.requests.Request>()
 
         private val r: com.github.jsocle.requests.Request
