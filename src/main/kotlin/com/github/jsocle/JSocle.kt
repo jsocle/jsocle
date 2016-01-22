@@ -9,6 +9,7 @@ import com.github.jsocle.requests.session.StringSession
 import com.github.jsocle.response.Response
 import com.github.jsocle.server.JettyServer
 import com.github.jsocle.servlet.JSocleHttpServlet
+import com.github.jsocle.servlet.JsocleErrorPageHandler
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.ServletHolder
@@ -18,7 +19,6 @@ import java.nio.file.Paths
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import kotlin.collections.forEach
 import kotlin.properties.Delegates
 
 public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null) : JSocleApp() {
@@ -44,6 +44,7 @@ public open class JSocle(config: JSocleConfig? = null, staticPath: Path? = null)
         servletContextHandler.resourceBase = staticPath.parent.toString()
         servletContextHandler.addServlet(ServletHolder(DefaultServlet()), "/static/*")
         servletContextHandler.addServlet(ServletHolder(servlet), "/*")
+        servletContextHandler.errorHandler = JsocleErrorPageHandler(config.debug)
 
         server.handler = servletContextHandler
         server.start()
