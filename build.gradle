@@ -29,7 +29,6 @@ dependencies {
             "org.eclipse.jetty:jetty-server:$jettyVersion",
             "org.eclipse.jetty:jetty-servlet:$jettyVersion",
             'com.github.jsocle:jsocle-html:8db2b914d3',
-            'com.github.jsocle:jsocle-form:db05992e3a',
             'commons-codec:commons-codec:1.10'
 }
 

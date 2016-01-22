@@ -47,7 +47,7 @@ class HooksTest {
 
     @Test
     fun testOnBeforeRequest() {
-        var onBeforeCallStack: MutableList<JSocleApp>
+        var onBeforeCallStack: MutableList<JSocleApp> = arrayListOf()
 
         val childApp = object : Blueprint() {
             val index = route("/") { -> }
