@@ -95,7 +95,7 @@ public abstract class JSocleApp {
         }
     }
 
-    fun makeResponse(res: Any?): Response {
+    open fun makeResponse(res: Any?): Response {
         return when (res) {
             null, Unit -> StaticResponse("", hashMapOf("Content-Type" to arrayListOf("text/html; charset=utf-8")))
             is String -> StaticResponse(res, hashMapOf("Content-Type" to arrayListOf("text/html; charset=utf-8")))
