@@ -1,10 +1,10 @@
 package com.github.jsocle.form
 
-import kotlin.collections.*
+import com.github.jsocle.request
+import com.github.jsocle.requests.Request
 import kotlin.reflect.KProperty
-import kotlin.text.startsWith
 
-public abstract class Form(parameters: Map<String, Array<String>>? = null,
+public abstract class Form(parameters: Map<String, List<String>>? = null,
                            val trim: Boolean = true) {
     val hasErrors: Boolean get() = errors.isNotEmpty()
 
@@ -19,10 +19,10 @@ public abstract class Form(parameters: Map<String, Array<String>>? = null,
     val errors: Array<String>
         get() = fields.flatMap { it.errors }.toTypedArray()
 
-    public val parameters: Map<String, Array<String>>
+    public val parameters: Map<String, List<String>>
 
     init {
-        this.parameters = parameters ?: request.parameters()
+        this.parameters = parameters ?: request.parameters
     }
 
     operator protected fun <T : Field<*, *>> T.getValue(form: Form, propertyMetadata: KProperty<*>): T {
@@ -31,7 +31,7 @@ public abstract class Form(parameters: Map<String, Array<String>>? = null,
     }
 
     fun validateOnPost(): Boolean {
-        if (request.method() != "POST") {
+        if (request.method != Request.Method.POST) {
             return false
         }
         return validate()

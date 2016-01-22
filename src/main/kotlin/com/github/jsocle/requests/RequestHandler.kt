@@ -3,9 +3,6 @@ package com.github.jsocle.requests
 import com.github.jsocle.Blueprint
 import com.github.jsocle.JSocleApp
 import java.net.URLEncoder
-import kotlin.collections.*
-import kotlin.text.replace
-import kotlin.text.toRegex
 
 abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String) {
     public val rule: RouteRule = RouteRule(rule)
@@ -24,27 +21,33 @@ abstract public class RequestHandler<R>(public val app: JSocleApp, rule: String)
     }
 
     public fun url(vararg pairs: Pair<String, Any>): String {
-        return url(pairs.toList().toMap())
+        val map = hashMapOf<String, MutableList<Any>>()
+        pairs.forEach {
+            map.getOrPut(it.first) { arrayListOf() }.add(it.second)
+        }
+        return url(map)
     }
 
-    public fun url(params: Map<String, Any>): String {
+    public fun url(params: Map<String, List<Any>>): String {
         val url = absoluteRule.replace("<([^>:]+)(:[^>]*)?>".toRegex()) {
             val name = it.groups[1]!!.value
             if (name !in params) {
                 throw NotEnoughVariables("Missing variable <$name> for $absoluteRule")
             }
-            params[name].toString()
+            params[name]!!.first().toString()
         }
         return url + buildQueryString(params)
     }
 
-    private fun buildQueryString(params: Map<String, Any>): String {
+    private fun buildQueryString(params: Map<String, List<Any>>): String {
         val queryParams = params.filter { it.key !in absolutePathVariables }
         if (queryParams.size == 0) {
             return ""
         }
-        val queryString = queryParams.map {
-            URLEncoder.encode(it.key, "UTF-8") + "=" + URLEncoder.encode(it.value.toString(), "UTF-8")
+        val queryString = queryParams.flatMap {
+            it.value.map { v ->
+                URLEncoder.encode(it.key, "UTF-8") + "=" + URLEncoder.encode(v.toString(), "UTF-8")
+            }
         }.joinToString("&")
         return "?" + queryString
     }

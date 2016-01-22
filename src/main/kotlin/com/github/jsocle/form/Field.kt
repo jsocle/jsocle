@@ -1,7 +1,6 @@
 package com.github.jsocle.form
 
 import com.github.jsocle.html.Node
-import kotlin.collections.*
 
 abstract class Field<T : Any, N : Node>(protected val mapper: FieldMapper<T>, val defaults: List<T?>) {
     internal var _validators: Any? = null
@@ -15,13 +14,13 @@ abstract class Field<T : Any, N : Node>(protected val mapper: FieldMapper<T>, va
             _values = values
         }
     private var rawFromValues = false
-    private var _raw: Array<String> = arrayOf()
-    val raw: Array<String>
+    private var _raw: List<String> = listOf()
+    val raw: List<String>
         get() {
             if (!rawFromValues) {
                 return _raw
             }
-            return values.map { mapper.toString(it) }.filter { it != null }.map { it!! }.toTypedArray()
+            return values.map { mapper.toString(it) }.filter { it != null }.map { it!! }
         }
 
     var name: String = ""
@@ -37,7 +36,7 @@ abstract class Field<T : Any, N : Node>(protected val mapper: FieldMapper<T>, va
             if (form.parameters.size == 0) {
                 values = defaults
             } else {
-                _raw = form.parameters[name] ?: arrayOf()
+                _raw = form.parameters[name] ?: listOf()
                 _values = _raw.map { mapper.fromString(this, it) }.filter { it != null }
             }
         }

@@ -12,14 +12,16 @@ public class IntFieldTest {
     }
 
     @Test public fun testValue() {
-        parameters("age" to "23")
-        val form = TestForm()
-        Assert.assertEquals(23, form.age.value)
+        parameters("age" to "23") {
+            val form = TestForm()
+            Assert.assertEquals(23, form.age.value)
+        }
     }
 
     @Test public fun testNullValue() {
-        parameters()
-        val form = TestForm()
-        Assert.assertNull(form.age.value)
+        parameters {
+            val form = TestForm()
+            Assert.assertNull(form.age.value)
+        }
     }
 }
