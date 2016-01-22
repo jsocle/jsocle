@@ -16,8 +16,8 @@ public abstract class Form(parameters: Map<String, List<String>>? = null,
                 .toTypedArray()
     }
 
-    val errors: Array<String>
-        get() = fields.flatMap { it.errors }.toTypedArray()
+    val errors: List<String>
+        get() = fields.flatMap { it.errors }
 
     public val parameters: Map<String, List<String>>
 
