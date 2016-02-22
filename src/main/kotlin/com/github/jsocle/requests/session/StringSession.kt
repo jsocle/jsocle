@@ -9,8 +9,6 @@ import java.net.URLEncoder
 import java.util.*
 import java.util.zip.DeflaterOutputStream
 import java.util.zip.InflaterInputStream
-import kotlin.collections.*
-import kotlin.text.split
 
 val String.urlEncoded: String
     get() {
@@ -61,10 +59,11 @@ public class StringSession(cookie: String?, val config: JSocleConfig) : Session(
 
     private fun decode(cookie: String?): ByteArray? {
         val pair = cookie?.split('.', limit = 2)
-        if (pair?.size ?: 0 != 2) {
+        if (pair == null || pair.size != 2) {
             return null
         }
-        val (base64EncodedValue, mac) = pair
+        val base64EncodedValue = pair[0]
+        val mac = pair[1]
         try {
             val value = base64EncodedValue.decodeBase64UrlSafe
             return if (Arrays.equals(hashValue(value), mac.decodeBase64UrlSafe)) value else null
